@@ -25,6 +25,7 @@
   --cool:#75aecb;--cool-soft:#1d2e3a;--cool-soft-ink:#aed6ec;--danger:#e2705f;--stone-dk:#302f2a;
   --shadow:0 1px 0 rgba(0,0,0,.4),0 10px 26px -14px rgba(0,0,0,.7);color-scheme:dark}}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0;color:var(--ink);font-family:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
   padding:calc(24px + env(safe-area-inset-top)) 16px 96px;
   background:
@@ -693,7 +694,13 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 </form></dialog>
 
 <dialog id="bk"><form method="dialog">
-<p style="margin:0">データはこのスマホの中だけに保存されています。家族に渡すときは「書き出し」でファイルを作って送ってください。</p>
+<div id="cloudBox" hidden>
+<p style="margin:0">♨ 家族と自動で共有中です。誰かが書いた記録は、みんなの手帳にも出ます。</p>
+<button type="button" class="btn" id="invite">家族を招待する(リンクを送る)</button>
+<p style="margin:0;font-size:12px;color:var(--ink-soft)">このリンクを知っている人は、誰でも記録を見たり書いたりできます。家族以外には送らないでください。</p>
+</div>
+<p id="localNote" style="margin:0">データはこのスマホの中だけに保存されています。家族に渡すときは「書き出し」でファイルを作って送ってください。</p>
+<p id="cstat" style="margin:0;font-size:12px;color:var(--ink-soft)"></p>
 <button type="button" class="btn" id="exp">書き出し(ファイルを送る・保存)</button>
 <label>読み込み(家族からもらったファイル。今ある記録に追加されます)<input id="imp" type="file" accept=".json,application/json"></label>
 <button class="btn">閉じる</button>
@@ -847,11 +854,16 @@ let activePref=null,cache=[],mapSel=null;
 let db,rating=0,photos=[],cur=null;
 const req=indexedDB.open('note',1);
 req.onupgradeneeded=()=>req.result.createObjectStore('e',{keyPath:'id'});
-req.onsuccess=()=>{db=req.result;render()};
+req.onsuccess=()=>{db=req.result;init()};
 const tx=m=>db.transaction('e',m).objectStore('e');
-const all=()=>new Promise(r=>{const q=tx('readonly').getAll();q.onsuccess=()=>r(q.result.map(norm))});
-const put=o=>new Promise(r=>{const q=tx('readwrite').put(o);q.onsuccess=r});
-const rm=id=>new Promise(r=>{const q=tx('readwrite').delete(id);q.onsuccess=r});
+const lAll=()=>new Promise(r=>{const q=tx('readonly').getAll();q.onsuccess=()=>r(q.result.map(norm))});
+const lPut=o=>new Promise(r=>{const q=tx('readwrite').put(o);q.onsuccess=r});
+const lRm=id=>new Promise(r=>{const q=tx('readwrite').delete(id);q.onsuccess=r});
+// mode が cloud のときは家族と共有のデータベース、local のときはこのスマホの中だけ
+let mode='local',cloud=null,cloudList=[];
+const all=async()=>mode==='cloud'?cloudList.map(norm):lAll();
+const put=async o=>mode==='cloud'?cloud.put(o):lPut(o);
+const rm=async id=>mode==='cloud'?cloud.rm(id):lRm(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 // 古い形式・他の手帳の形式も受け付けて、今の形式にそろえる
 const norm=o=>({...o,name:o.name??o.facility??'',memo:o.memo??o.note??'',members:o.members||'',rating:+o.rating||0,photos:o.photos||(o.photo?[o.photo]:[])});
@@ -1016,5 +1028,40 @@ $('#imp').onchange=async e=>{
   }
   if(!reduce&&!entered)timer=setInterval(step,255);
 })();
+const setStatus=(s,e)=>{
+  $('#cstat').textContent=s==='error'?'同期できませんでした('+(e&&e.code||'通信エラー')+')。つながったら自動で再開します。':'';
+};
+async function init(){
+  await render();
+  let cm;
+  try{cm=await import('./cloud.js')}catch(e){return}
+  if(!cm.enabled)return;
+  let fid;try{fid=localStorage.fid}catch(e){}
+  const m=location.hash.match(/^#f=([A-Za-z0-9_-]{16,})$/);
+  if(m){
+    if(!fid||fid===m[1]||confirm('家族の手帳に切り替えます。\nこの端末にある記録は、切り替え後に「家族の手帳に追加」できます。'))fid=m[1];
+    history.replaceState(null,'',location.pathname+location.search);
+  }
+  if(!fid)fid=crypto.randomUUID().replace(/-/g,'')+crypto.randomUUID().replace(/-/g,'').slice(0,8);
+  try{localStorage.fid=fid}catch(e){}
+  cloud=cm.connect(fid,list=>{
+    cloudList=list;
+    if(mode!=='cloud'){mode='cloud';$('#cloudBox').hidden=false;$('#localNote').hidden=true;offerMigrate(fid)}
+    render();
+  },setStatus);
+  $('#invite').onclick=async()=>{
+    const url=location.origin+location.pathname+'#f='+fid;
+    if(navigator.share){try{await navigator.share({title:'おでかけ手帳',text:'家族のおでかけ手帳に参加しよう',url});return}catch(e){if(e.name==='AbortError')return}}
+    try{await navigator.clipboard.writeText(url);alert('招待リンクをコピーしました。家族に送ってください。')}catch(e){prompt('このリンクを家族に送ってください',url)}
+  };
+}
+async function offerMigrate(fid){
+  const key='migrated_'+fid;
+  try{if(localStorage[key])return}catch(e){return}
+  const mine=await lAll();
+  localStorage[key]=1;
+  if(!mine.length)return;
+  if(confirm('この端末に保存されている記録('+mine.length+'件)を、家族の手帳にも追加しますか?'))mine.forEach(o=>cloud.put(o));
+}
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
 </script></body></html>

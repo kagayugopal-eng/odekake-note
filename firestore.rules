@@ -1,0 +1,12 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 家族ごとの長いランダムな番号(招待リンクに入っている)を知っている人だけが読み書きできる
+    match /families/{fid}/{col}/{id} {
+      allow read: if col in ['visits', 'photos'];
+      allow delete: if col in ['visits', 'photos'];
+      allow create, update: if (col == 'visits' && request.resource.size() < 100000)
+                            || (col == 'photos' && request.resource.size() < 600000);
+    }
+  }
+}
