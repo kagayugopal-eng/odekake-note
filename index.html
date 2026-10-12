@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#c8553d">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>おでかけ手帳</title>
+<style>
+:root{--bg:#fbf6ef;--card:#fff;--ink:#2b2420;--sub:#85786d;--acc:#c8553d;--line:#eadfd2}
+@media(prefers-color-scheme:dark){:root{--bg:#1c1816;--card:#292321;--ink:#f3ebe3;--sub:#a8998c;--line:#3b332f}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,"Hiragino Sans",sans-serif;padding-bottom:90px}
+header{position:sticky;top:0;background:var(--acc);color:#fff;padding:calc(12px + env(safe-area-inset-top)) 16px 12px;display:flex;justify-content:space-between;align-items:center;z-index:5}
+h1{font-size:18px;margin:0}
+header button{background:none;border:0;color:#fff;font-size:14px}
+main{padding:16px;max-width:600px;margin:auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden}
+.card img{width:100%;max-height:220px;object-fit:cover;display:block}
+.card .b{padding:12px 14px}
+.card h2{font-size:17px;margin:0 0 2px}
+.meta{color:var(--sub);font-size:13px}
+.stars{color:#e9a21b;letter-spacing:2px}
+.empty{text-align:center;color:var(--sub);margin-top:60px}
+#fab{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom));width:60px;height:60px;border-radius:50%;border:0;background:var(--acc);color:#fff;font-size:32px;box-shadow:0 4px 12px #0004}
+dialog{border:0;border-radius:16px;padding:0;width:min(560px,94vw);max-height:92vh;background:var(--bg);color:var(--ink)}
+dialog::backdrop{background:#0008}
+form{padding:16px;display:grid;gap:12px}
+label{font-size:13px;color:var(--sub);display:grid;gap:4px}
+input,textarea{font:inherit;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);width:100%}
+.row{display:flex;gap:8px}
+.btn{flex:1;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit}
+.btn.p{background:var(--acc);color:#fff;border:0}
+.btn.d{color:#c0392b}
+.rate button{background:none;border:0;font-size:30px;color:#ccc;padding:0 2px}
+.rate button.on{color:#e9a21b}
+#prev{max-width:100%;border-radius:10px}
+.detail img{width:100%}
+</style></head><body>
+<header><h1>♨ おでかけ手帳</h1><button id="menu">バックアップ</button></header>
+<main><input id="q" placeholder="さがす(施設名・メンバー・感想)" style="margin-bottom:14px"><div id="list"></div></main>
+<button id="fab" aria-label="追加">＋</button>
+
+<dialog id="edit"><form id="f" method="dialog">
+<label>施設名<input name="name" required></label>
+<label>日付<input name="date" type="date" required></label>
+<label>メンバー<input name="members" placeholder="パパ、ママ、たろう"></label>
+<label>評価<div class="rate" id="rate"></div></label>
+<label>ひとこと感想<textarea name="memo" rows="4"></textarea></label>
+<label>写真<input id="photo" type="file" accept="image/*"></label>
+<img id="prev" hidden>
+<div class="row"><button type="button" class="btn" id="cancel">閉じる</button><button type="button" class="btn d" id="del" hidden>削除</button><button class="btn p">保存</button></div>
+</form></dialog>
+
+<dialog id="bk"><form method="dialog">
+<p style="margin:0">データはこのスマホの中だけに保存されています。家族に渡すときは「書き出し」でファイルを作って送ってください。</p>
+<button type="button" class="btn" id="exp">書き出し(ファイルを送る・保存)</button>
+<label>読み込み(家族からもらったファイル。今ある記録に追加されます)<input id="imp" type="file" accept=".json,application/json"></label>
+<button class="btn">閉じる</button>
+</form></dialog>
+
+<script>
+const $=s=>document.querySelector(s);
+let db,rating=0,photo='',cur=null;
+const req=indexedDB.open('note',1);
+req.onupgradeneeded=()=>req.result.createObjectStore('e',{keyPath:'id'});
+req.onsuccess=()=>{db=req.result;render()};
+const tx=m=>db.transaction('e',m).objectStore('e');
+const all=()=>new Promise(r=>{const q=tx('readonly').getAll();q.onsuccess=()=>r(q.result)});
+const put=o=>new Promise(r=>{const q=tx('readwrite').put(o);q.onsuccess=r});
+const rm=id=>new Promise(r=>{const q=tx('readwrite').delete(id);q.onsuccess=r});
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const stars=n=>'★'.repeat(n)+'☆'.repeat(5-n);
+
+async function render(){
+  const k=$('#q').value.trim().toLowerCase();
+  let a=(await all()).sort((x,y)=>y.date.localeCompare(x.date));
+  if(k)a=a.filter(e=>[e.name,e.members,e.memo].join(' ').toLowerCase().includes(k));
+  $('#list').innerHTML=a.length?a.map(e=>`<div class="card" data-id="${e.id}">${e.photo?`<img src="${e.photo}">`:''}<div class="b"><h2>${esc(e.name)}</h2><div class="stars">${stars(e.rating||0)}</div><div class="meta">${esc(e.date)}${e.members?' ・ '+esc(e.members):''}</div>${e.memo?`<p style="margin:6px 0 0">${esc(e.memo)}</p>`:''}</div></div>`).join(''):'<p class="empty">まだ記録がありません<br>右下の＋から追加しましょう</p>';
+}
+$('#q').oninput=render;
+$('#list').onclick=async e=>{const c=e.target.closest('.card');if(!c)return;open((await all()).find(x=>x.id===c.dataset.id))};
+
+function drawRate(){$('#rate').innerHTML=[1,2,3,4,5].map(i=>`<button type="button" data-n="${i}" class="${i<=rating?'on':''}">★</button>`).join('')}
+$('#rate').onclick=e=>{const n=e.target.dataset.n;if(n){rating=rating==n?0:+n;drawRate()}};
+function open(e){
+  cur=e||null;const f=$('#f');f.reset();
+  f.name.value=e?.name||'';f.date.value=e?.date||new Date().toISOString().slice(0,10);
+  f.members.value=e?.members||localStorage.lastMembers||'';f.memo.value=e?.memo||'';
+  rating=e?.rating||0;photo=e?.photo||'';drawRate();
+  $('#prev').hidden=!photo;$('#prev').src=photo;$('#del').hidden=!e;
+  $('#edit').showModal();
+}
+$('#fab').onclick=()=>open();
+$('#cancel').onclick=()=>$('#edit').close();
+$('#photo').onchange=e=>{
+  const file=e.target.files[0];if(!file)return;
+  const img=new Image();img.onload=()=>{
+    const s=Math.min(1,1000/Math.max(img.width,img.height)),c=document.createElement('canvas');
+    c.width=img.width*s;c.height=img.height*s;c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+    photo=c.toDataURL('image/jpeg',.75);$('#prev').src=photo;$('#prev').hidden=false;URL.revokeObjectURL(img.src)};
+  img.src=URL.createObjectURL(file);
+};
+$('#f').onsubmit=async()=>{
+  const f=$('#f');
+  localStorage.lastMembers=f.members.value;
+  await put({id:cur?.id||crypto.randomUUID(),name:f.name.value,date:f.date.value,members:f.members.value,memo:f.memo.value,rating,photo});
+  render();
+};
+$('#del').onclick=async()=>{if(confirm('この記録を削除しますか?')){await rm(cur.id);$('#edit').close();render()}};
+
+$('#menu').onclick=()=>$('#bk').showModal();
+$('#exp').onclick=async()=>{
+  const blob=new Blob([JSON.stringify(await all())],{type:'application/json'});
+  const file=new File([blob],'odekake-note.json',{type:'application/json'});
+  if(navigator.canShare?.({files:[file]})){try{await navigator.share({files:[file]});return}catch(e){if(e.name==='AbortError')return}}
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=file.name;a.click();
+};
+$('#imp').onchange=async e=>{
+  try{const list=JSON.parse(await e.target.files[0].text());
+    for(const o of list)if(o.id&&o.name&&o.date)await put(o);
+    alert(list.length+'件を読み込みました');render();$('#bk').close();
+  }catch{alert('読み込めないファイルです')}
+  e.target.value='';
+};
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
+</script></body></html>

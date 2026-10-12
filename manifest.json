@@ -1,0 +1,9 @@
+{
+  "name": "おでかけ手帳",
+  "short_name": "おでかけ手帳",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fbf6ef",
+  "theme_color": "#c8553d",
+  "icons": [{"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}]
+}
