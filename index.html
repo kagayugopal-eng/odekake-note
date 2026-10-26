@@ -1278,7 +1278,7 @@ async function init(){
   let fid;try{fid=localStorage.fid}catch(e){}
   const m=location.hash.match(/^#f=([A-Za-z0-9_-]{16,})$/);
   if(m){
-    if(!fid||fid===m[1]||confirm('共有の手帳に切り替えます。\nこの端末にある記録は、切り替え後に「家族の手帳に追加」できます。'))fid=m[1];
+    if(!fid||fid===m[1]||confirm('共有の手帳に切り替えます。\nこの端末にある記録は、切り替え後に「共有の手帳に追加」できます。'))fid=m[1];
     history.replaceState(null,'',location.pathname+location.search);
   }
   if(!fid)fid=crypto.randomUUID().replace(/-/g,'')+crypto.randomUUID().replace(/-/g,'').slice(0,8);
