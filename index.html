@@ -616,17 +616,17 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 @keyframes tpPop{0%{transform:scale(1)}45%{transform:scale(1.18)}100%{transform:scale(1)}}
 @keyframes heatGlow{0%,100%{text-shadow:0 0 10px rgba(255,90,30,.35)}50%{text-shadow:0 0 26px rgba(255,90,30,.85),0 0 6px rgba(255,170,90,.8)}}
 @keyframes coolGlow{0%,100%{text-shadow:0 0 8px rgba(40,150,255,.3)}50%{text-shadow:0 0 22px rgba(40,150,255,.8)}}
-.gauge{height:8px;border-radius:4px;background:rgba(0,0,0,.1);overflow:hidden;margin:0 6px 10px}
-.gauge i{display:block;height:100%;width:0;border-radius:4px;transition:width 1.5s cubic-bezier(.2,.8,.2,1)}
-.tp.hot .gauge i{background:linear-gradient(90deg,#ffb259,#ff5a1f,#e5260d)}
-.tp.cool .gauge i{background:linear-gradient(90deg,#8fd8ff,#3a9bff,#1469d8)}
+.tgauge{height:8px;border-radius:4px;background:rgba(0,0,0,.1);overflow:hidden;margin:0 6px 10px}
+.tgauge i{display:block;height:100%;width:0;border-radius:4px;transition:width 1.5s cubic-bezier(.2,.8,.2,1)}
+.tp.hot .tgauge i{background:linear-gradient(90deg,#ffb259,#ff5a1f,#e5260d)}
+.tp.cool .tgauge i{background:linear-gradient(90deg,#8fd8ff,#3a9bff,#1469d8)}
 .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:5px}
 .chips span{font-size:11px;font-weight:700;color:#fff;background:#7b7f85;border-radius:6px;padding:2px 8px}
 .chips span.none{background:rgba(0,0,0,.12);color:#555}
 /* サウナ: 熱でゆらめく */
-.heat span{position:absolute;bottom:-20px;width:34px;height:90px;border-radius:50%;background:linear-gradient(0deg,rgba(255,110,40,.55),rgba(255,160,90,0));filter:blur(9px);animation:heatRise 2.8s ease-in infinite;opacity:0;z-index:0}
-.heat span:nth-child(1){left:6%}.heat span:nth-child(2){left:26%;animation-delay:.7s}.heat span:nth-child(3){left:46%;animation-delay:1.5s}
-.heat span:nth-child(4){left:64%;animation-delay:.3s}.heat span:nth-child(5){left:82%;animation-delay:1.1s}
+.tpheat span{position:absolute;bottom:-20px;width:34px;height:90px;border-radius:50%;background:linear-gradient(0deg,rgba(255,110,40,.55),rgba(255,160,90,0));filter:blur(9px);animation:heatRise 2.8s ease-in infinite;opacity:0;z-index:0}
+.tpheat span:nth-child(1){left:6%}.tpheat span:nth-child(2){left:26%;animation-delay:.7s}.tpheat span:nth-child(3){left:46%;animation-delay:1.5s}
+.tpheat span:nth-child(4){left:64%;animation-delay:.3s}.tpheat span:nth-child(5){left:82%;animation-delay:1.1s}
 @keyframes heatRise{0%{transform:translateY(0) scaleX(.8);opacity:0}25%{opacity:.9}100%{transform:translateY(-150px) scaleX(1.5) skewX(8deg);opacity:0}}
 /* 水風呂: 波紋と泡 */
 .water{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
@@ -643,7 +643,7 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 .dtMemo{margin:16px 0 0;font-size:14px;line-height:1.7;white-space:pre-wrap;word-break:break-word}
 .dtFoot{margin-top:18px;display:flex;justify-content:flex-end}
 .dtFoot button{background:none;border:none;color:var(--ink-faint);text-decoration:underline;font:inherit;font-size:12px;cursor:pointer}
-@media(prefers-reduced-motion:reduce){.heat span,.water .rip,.water .bub,.water .wave{animation:none;opacity:.3}.tp.done .tv b{animation:none!important}}
+@media(prefers-reduced-motion:reduce){.tpheat span,.water .rip,.water .bub,.water .wave{animation:none;opacity:.3}.tp.done .tv b{animation:none!important}}
 </style></head><body>
 <div id="viewCover" class="cv" role="button" aria-label="タップしてはじめる">
   <div class="cv-glow" aria-hidden="true"></div>
@@ -1298,12 +1298,12 @@ function dtHtml(e){
   const sauIco='<svg class="ico" width="46" height="46" viewBox="0 0 48 48" fill="none" stroke="#d8341c" stroke-width="2.6" stroke-linejoin="round"><rect x="5" y="9" width="38" height="30"/><path d="M5 17h38M5 25h38"/><rect x="29" y="25" width="10" height="14"/><circle cx="34" cy="32" r="1.3" fill="#d8341c"/></svg>';
   const miIco='<svg class="ico" width="46" height="46" viewBox="0 0 48 48" fill="none" stroke="#1469d8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><rect x="5" y="9" width="38" height="30"/><path d="M11 21q3.5-3.5 7 0t7 0 7 0M11 30q3.5-3.5 7 0t7 0 7 0"/></svg>';
   const wave='<svg class="wave" viewBox="0 0 400 26" preserveAspectRatio="none"><path d="M0 13q25-14 50 0t50 0 50 0 50 0 50 0 50 0 50 0 50 0V26H0z" fill="#8fc8f5"/></svg>';
-  const hot=`<div class="tp hot"><div class="heat" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>${sauIco}<div class="tl">サウナ室</div>
+  const hot=`<div class="tp hot"><div class="tpheat" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>${sauIco}<div class="tl">サウナ室</div>
 <div class="tv"><small>温度</small>${st!=null?`<b data-to="${st}" data-from="${Math.min(30,st)}">${st}</b>`:'<b>–</b>'}<em>度</em></div>
-${st!=null?`<div class="gauge"><i data-w="${Math.max(4,Math.min(100,st/120*100))}"></i></div>`:''}<div class="chips">${hotChips}</div></div>`;
+${st!=null?`<div class="tgauge"><i data-w="${Math.max(4,Math.min(100,st/120*100))}"></i></div>`:''}<div class="chips">${hotChips}</div></div>`;
   const cool=`<div class="tp cool"><div class="water" aria-hidden="true"><i class="rip"></i><i class="rip"></i><i class="rip"></i><i class="bub"></i><i class="bub"></i><i class="bub"></i><i class="bub"></i>${wave}</div>${miIco}<div class="tl">水風呂</div>
 <div class="tv"><small>温度</small>${mt!=null?`<b data-to="${mt}" data-from="${mt<30?30:Math.max(0,mt-15)}">${mt}</b>`:'<b>–</b>'}<em>度</em></div>
-${mt!=null?`<div class="gauge"><i data-w="${Math.max(4,Math.min(100,mt/40*100))}"></i></div>`:''}<div class="chips">${coolChips}</div></div>`;
+${mt!=null?`<div class="tgauge"><i data-w="${Math.max(4,Math.min(100,mt/40*100))}"></i></div>`:''}<div class="chips">${coolChips}</div></div>`;
   const delta=(st!=null&&mt!=null&&st>mt)?`<div class="delta">温度差 <b data-to="${Math.round((st-mt)*10)/10}" data-from="0">${Math.round((st-mt)*10)/10}</b>℃ ── この落差が、ととのいをつくる。</div>`:'';
   const sub=[e.prefecture,e.address].filter(Boolean).join(' ');
   return `${gal}<div class="dtIn"><h2>${e.status==='pending'?'<span class="tag" style="background:var(--heat);color:#fff;border-color:transparent;margin-right:6px;font-size:11px">承認待ち</span>':''}${esc(e.name)}</h2>
@@ -1327,8 +1327,8 @@ function renderDetail(animate){
     b.textContent=from.toFixed((String(to).split('.')[1]||'').length);
     countTo(b,from,to,host&&host.classList.contains('delta')?1900:1500,()=>host&&host.classList.add('done'));
   });
-  requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll('#dtBody .gauge i').forEach(i=>{i.style.width=i.dataset.w+'%'})));
-  if(!animate)document.querySelectorAll('#dtBody .gauge i').forEach(i=>{i.style.transition='none'});
+  requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll('#dtBody .tgauge i').forEach(i=>{i.style.width=i.dataset.w+'%'})));
+  if(!animate)document.querySelectorAll('#dtBody .tgauge i').forEach(i=>{i.style.transition='none'});
 }
 function refreshDetail(){
   if(curView!=='detail')return;
