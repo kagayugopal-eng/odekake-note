@@ -1,4 +1,4 @@
-const C='note-v7',F=['./','index.html','manifest.json','icon.svg','cloud.js','firebase-config.js'];
+const C='note-v8',F=['./','index.html','manifest.json','icon.svg','cloud.js','firebase-config.js'];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(F)))});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim())));
 // ネットがあれば最新を取得し、なければ保存済みを使う。データベースとの通信には触れない

@@ -2,12 +2,12 @@
 <html lang="ja"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#6e4a29">
+<meta name="theme-color" content="#f4fafa">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Zen+Old+Mincho:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Yuji+Syuku&family=Zen+Old+Mincho:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
 <title>おでかけ手帳</title>
 <style>
 :root{
@@ -475,14 +475,92 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 #viewMap{padding-bottom:40px}
 #viewMap .wrap2{max-width:640px;margin:0 auto}
 #viewMap .mapWrap svg{max-width:420px}
+
+/* ---------- 表紙(RYDEN風 × サウナ) ---------- */
+:root{--cv-bg:#f4fafa;--cv-ink:#0b0b0b;--cv-lime:#d8ff00}
+.cv{position:fixed;inset:0;z-index:90;background-color:var(--cv-bg);color:var(--cv-ink);cursor:pointer;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:calc(18px + env(safe-area-inset-top)) 16px calc(18px + env(safe-area-inset-bottom));
+  background-image:radial-gradient(circle,rgba(11,11,11,.22) 1.2px,transparent 1.6px);background-size:38px 38px;background-position:19px 19px;
+  transition:opacity .5s ease;color-scheme:light}
+.cv.hide{opacity:0;pointer-events:none}
+.cv-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.cv-logo{font-family:"Dela Gothic One","Zen Kaku Gothic New",sans-serif;font-size:17px;letter-spacing:.02em;line-height:1.2;padding-top:4px}
+.cv-tag{font-size:10px;line-height:1.5;font-weight:700;letter-spacing:.02em;max-width:110px;padding-top:6px}
+.cv-btns{display:flex;gap:8px}
+.cv-btn{font-family:"Zen Kaku Gothic New",sans-serif;font-weight:700;font-size:13px;letter-spacing:.06em;color:var(--cv-lime);background:var(--cv-ink);border:0;border-radius:12px;height:44px;padding:0 16px;cursor:pointer}
+.cv-btn:active{transform:scale(.97)}
+.cv-main{position:relative;width:min(100%,82vh);margin:0 auto}
+.cv-cols{display:flex;justify-content:space-between;gap:8px;margin-bottom:10px}
+.cv-col{font-size:9.5px;line-height:1.35;font-weight:700;letter-spacing:.04em;width:30%}
+.cv-col svg{display:block;margin-bottom:8px}
+.cv-col b{display:block;font-weight:700}
+.cv-col span{display:block;font-weight:500;color:#555;letter-spacing:.02em;margin-top:2px}
+.cv-word{display:block;width:100%;height:auto;overflow:visible}
+.cv-word text{font-family:"Dela Gothic One","Zen Kaku Gothic New",sans-serif;fill:var(--cv-ink)}
+.cv-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}
+.cv-sub{font-size:12px;font-weight:700;line-height:1.5}
+.cv-go{display:inline-flex;align-items:center;gap:8px;background:var(--cv-lime);color:var(--cv-ink);font-weight:700;font-size:12px;letter-spacing:.08em;border-radius:999px;padding:11px 16px;white-space:nowrap}
+.cv-go i{font-style:normal;display:inline-block;animation:cvBob 1.3s ease-in-out infinite}
+@keyframes cvBob{0%,100%{transform:translateY(-2px)}50%{transform:translateY(3px)}}
+.cv-word .l1,.cv-word .l2{opacity:0;transform:translateY(40%);animation:cvUp .9s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:2.15s}
+.cv-word .l2{animation-delay:2.27s}
+.cv.noIntro .cv-word .l1,.cv.noIntro .cv-word .l2{animation-delay:0s}
+@keyframes cvUp{to{opacity:1;transform:none}}
+.cv-top,.cv-cols,.cv-bottom{animation:cvFade .8s ease 2.1s both}
+.cv-cols{animation-delay:2.25s}.cv-bottom{animation-delay:2.5s}
+.cv.noIntro .cv-top,.cv.noIntro .cv-cols,.cv.noIntro .cv-bottom{animation-delay:0s}
+@keyframes cvFade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+/* サウナの場面(元のサウナ手帳の部品)。蛍光イエローの湯気にして新しい表紙になじませる */
+.cv-scene{position:relative;height:66px;margin-top:6px}
+.cv-scene .onsenPool{left:calc(50% - 148px);bottom:0}
+.cv-scene .reclineChair{left:calc(50% + 88px);bottom:0}
+.cv-scene .vihtaDeco{left:calc(50% - 46px);bottom:2px}
+.cv-scene .neppashi{left:calc(50% + 22px);bottom:0}
+.cv-scene .loylyClock{left:calc(50% - 76px);bottom:4px}
+.cv-scene .loylyStones{left:50%;bottom:0}
+.cv-scene .glow{background:radial-gradient(ellipse,rgba(216,255,0,.95),rgba(216,255,0,0) 70%)}
+.cv-scene .splashPuffs span{background:radial-gradient(circle,rgba(216,255,0,.9),rgba(160,190,0,.25) 60%,rgba(216,255,0,0) 78%)}
+.cv-scene .steamRise span{background:radial-gradient(circle,rgba(216,255,0,.7),rgba(216,255,0,.32) 52%,rgba(216,255,0,0) 78%)}
+.cv-scene .waterStream{background:linear-gradient(rgba(60,130,170,.95),rgba(60,130,170,.25))}
+.cv-scene .loylyClock circle:first-child{fill:#0b0b0b;opacity:.06}
+.cv-scene .loylyClock g{stroke:#0b0b0b}
+.cv-scene .loylyClock line#clockNeedle{stroke:#0b0b0b}
+.cv-scene .loylyClock circle:last-child{fill:#0b0b0b}
+/* オープニング(黒い四角 → 黒い帯 → 蛍光イエロー → 表紙) */
+.cv-intro{position:fixed;inset:0;z-index:95;pointer-events:none;overflow:hidden}
+.cv-intro .sq{position:absolute;width:14px;height:14px;background:#2b2b2b;opacity:0;animation:sqPop .5s steps(1,end) forwards}
+@keyframes sqPop{0%{opacity:0}1%,100%{opacity:1}}
+.cv-intro .bar{position:absolute;inset:0;background:var(--cv-ink);transform:translateY(100%);animation:barUp .55s cubic-bezier(.7,0,.2,1) 1.0s forwards}
+@keyframes barUp{to{transform:none}}
+.cv-intro .lime{position:absolute;inset:0;background:var(--cv-lime);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;transform:translateY(100%);animation:barUp .5s cubic-bezier(.7,0,.2,1) 1.45s forwards}
+.cv-intro .lime b{font-family:"Dela Gothic One","Zen Kaku Gothic New",sans-serif;font-weight:400;font-size:clamp(34px,11vw,64px);letter-spacing:.02em;color:var(--cv-ink)}
+.cv-intro .lime small{font-size:22px;color:var(--cv-ink)}
+.cv-intro.out{animation:introOut .7s cubic-bezier(.7,0,.2,1) forwards}
+@keyframes introOut{to{transform:translateY(-100%)}}
+@media(prefers-reduced-motion:reduce){.cv-word .l1,.cv-word .l2,.cv-top,.cv-cols,.cv-bottom{animation:none;opacity:1;transform:none}.cv-go i{animation:none}}
 </style></head><body>
-<div id="viewCover" class="coverView" role="button" aria-label="タップしてはじめる">
-  <div class="bigSteam" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
-  <div class="coverMark" aria-hidden="true">♨</div>
-  <h1 class="coverTitle">おでかけ手帳</h1>
-  <p class="coverSub">家族で行った場所を、ひとつずつ書きためていく。</p>
-  <p class="coverTap">タップしてはじめる</p>
-  <div class="onsenPool" aria-hidden="true">
+<div id="viewCover" class="cv" role="button" aria-label="タップしてはじめる">
+  <div class="cv-top">
+    <div class="cv-logo">♨ おでかけ<br>手帳</div>
+    <div class="cv-tag">Our trips,<br>our stories.<br>We are family.</div>
+    <div class="cv-btns">
+      <button type="button" class="cv-btn" id="cvMap">MAP</button>
+      <button type="button" class="cv-btn" id="cvNote">NOTE</button>
+    </div>
+  </div>
+  <div class="cv-main">
+    <div class="cv-cols" aria-hidden="true">
+      <div class="cv-col"><svg width="34" height="14" viewBox="0 0 34 14" fill="none" stroke="#0b0b0b" stroke-width="1.6"><rect x="1" y="1" width="12" height="12"/><path d="M7 4v6M4 7h6"/><path d="M20 11L30 3M23 3h7v7"/></svg><b>OUR RECENT<br>TRIPS 01</b><span>最近の記録</span></div>
+      <div class="cv-col"><svg width="34" height="14" viewBox="0 0 34 14" fill="none" stroke="#0b0b0b" stroke-width="1.6"><rect x="1" y="1" width="12" height="12"/><path d="M7 4v6M4 7h6"/><path d="M20 11L30 3M23 3h7v7"/></svg><b>OUR MAP<br>OF JAPAN</b><span>行った場所の地図</span></div>
+      <div class="cv-col"><svg width="34" height="14" viewBox="0 0 34 14" fill="none" stroke="#0b0b0b" stroke-width="1.6"><rect x="1" y="1" width="12" height="12"/><path d="M7 4v6M4 7h6"/><path d="M20 11L30 3M23 3h7v7"/></svg><b>SAUNA<br>&amp; MORE</b><span>サウナもおでかけも</span></div>
+    </div>
+    <svg class="cv-word" viewBox="0 0 100 62" role="img" aria-label="ODEKAKE NOTE">
+      <text class="l1" x="0" y="17.5" font-size="19.5" textLength="100" lengthAdjust="spacingAndGlyphs">ODEKAKE</text>
+      <text class="l2" x="0" y="60" font-size="50" textLength="100" lengthAdjust="spacingAndGlyphs">NOTE</text>
+    </svg>
+    <div class="cv-scene" aria-hidden="true">
+<div class="onsenPool" aria-hidden="true">
     <svg viewBox="0 0 70 42">
       <ellipse cx="35" cy="30" rx="32" ry="8" fill="#000" opacity="0.2"/>
       <ellipse cx="35" cy="24" rx="30" ry="13" fill="none" stroke="var(--stone-dk)" stroke-width="4"/>
@@ -597,8 +675,13 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
     <div class="splashPuffs" id="splashPuffs" aria-hidden="true"></div>
     <div class="steamRise" id="steamRise" aria-hidden="true"></div>
   </div>
+    </div>
+    <div class="cv-bottom">
+      <div class="cv-sub">家族で行った場所を、<br>ひとつずつ書きためていく。</div>
+      <div class="cv-go">TAP TO ENTER <i>↓</i></div>
+    </div>
+  </div>
 </div>
-
 <div id="viewHome" hidden>
 <div class="wrap">
 <header class="cover">
@@ -1002,17 +1085,25 @@ $('#imp').onchange=async e=>{
 // ---- 表紙 ----
 (function(){
   const cover=$('#viewCover');
-  let entered=false;
+  let entered=false,introDone=false,introEl=null,tick=0,timer=null;
   try{if(sessionStorage.coverSeen){cover.hidden=true;entered=true}}catch(e){}
   showView(entered?'home':'none');
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let tick=0,timer=null;
-  function enter(){
-    if(entered)return;entered=true;
+  function enter(to){
+    if(entered)return;entered=true;clearInterval(timer);
     try{sessionStorage.coverSeen=1}catch(e){}
-    cover.classList.add('hide');setTimeout(()=>{cover.hidden=true;mapSel=null;renderMapPage();showView('map')},520);
+    cover.classList.add('hide');
+    setTimeout(()=>{cover.hidden=true;mapSel=null;renderMapPage();showView(to||'map')},520);
   }
-  cover.addEventListener('click',enter);
+  function endIntro(){
+    if(introDone||!introEl)return;introDone=true;
+    introEl.classList.add('out');
+    setTimeout(()=>{introEl&&introEl.remove()},800);
+  }
+  cover.addEventListener('click',()=>{if(introEl&&!introDone){endIntro();return}enter('map')});
+  $('#cvMap').addEventListener('click',e=>{e.stopPropagation();enter('map')});
+  $('#cvNote').addEventListener('click',e=>{e.stopPropagation();enter('home')});
+  // サウナの時計が1周するたびに、石へ水をかけてロウリュ。ときどき熱波師が出てくる
   function burst(){
     if(entered)return;
     const w=$('#splashPuffs'),r=$('#steamRise'),st=$('#loylyStones');
@@ -1026,7 +1117,20 @@ $('#imp').onchange=async e=>{
     tick=(tick+1)%12;$('#clockNeedle').style.transform='rotate('+tick*30+'deg)';
     if(tick===0)burst();
   }
-  if(!reduce&&!entered)timer=setInterval(step,255);
+  if(entered)return;
+  if(reduce){cover.classList.add('noIntro');return}
+  // オープニング: 黒い四角 → 黒い帯 → 蛍光イエロー → 表紙があらわれる
+  introEl=document.createElement('div');introEl.className='cv-intro';
+  const W=innerWidth,H=innerHeight,g=38;
+  let h='';
+  for(let i=0;i<16;i++){
+    const x=Math.floor(Math.random()*(W/g))*g+19-7,y=Math.floor(Math.random()*(H/g))*g+19-7;
+    h+='<span class="sq" style="left:'+x+'px;top:'+y+'px;animation-delay:'+(i*0.045).toFixed(2)+'s"></span>';
+  }
+  h+='<div class="bar"></div><div class="lime"><b>ODEKAKE</b><small>♨</small></div>';
+  introEl.innerHTML=h;document.body.appendChild(introEl);
+  setTimeout(endIntro,2150);
+  setTimeout(()=>{if(!entered)timer=setInterval(step,255)},2400);
 })();
 const setStatus=(s,e)=>{
   $('#cstat').textContent=s==='error'?'同期できませんでした('+(e&&e.code||'通信エラー')+')。つながったら自動で再開します。':'';
