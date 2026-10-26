@@ -553,18 +553,32 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 .admCard h3{font-family:"Zen Old Mincho",serif;font-size:16.5px;margin:0 0 2px}
 .admBtns{display:flex;gap:8px;padding:0 14px 14px}
 .admEmpty{color:var(--waku);text-align:center;border:1px dashed rgba(255,236,200,.4);border-radius:14px;padding:30px 16px;font-size:13px}
+.cv-choices{display:flex;gap:8px;margin-bottom:16px}
+.cv-choice{flex:1;min-width:0;text-align:left;font-family:"Zen Kaku Gothic New",sans-serif;color:var(--cv-cream);background:rgba(242,232,211,.05);border:1.5px solid rgba(242,232,211,.28);border-radius:14px;padding:10px 10px 11px;cursor:pointer;transition:background .15s,border-color .15s,transform .15s}
+.cv-choice svg{display:block;margin-bottom:8px;color:var(--cv-ember)}
+.cv-choice b{display:block;font-size:10px;font-weight:700;letter-spacing:.06em;line-height:1.35}
+.cv-choice span{display:block;font-size:10px;font-weight:500;color:var(--cv-dim);margin-top:3px;letter-spacing:.02em}
+.cv-choice:hover{border-color:var(--cv-ember)}
+.cv-choice:active{transform:scale(.97);background:var(--cv-ember);border-color:var(--cv-ember);color:#1a0b04}
+.cv-choice:active svg,.cv-choice:active span{color:#1a0b04}
+.cv-choices{animation:cvFade .9s ease 2.5s both}
+.cv.noIntro .cv-choices{animation-delay:0s}
+@media(prefers-reduced-motion:reduce){.cv-choices{animation:none;opacity:1;transform:none}}
 </style></head><body>
 <div id="viewCover" class="cv" role="button" aria-label="タップしてはじめる">
   <div class="cv-glow" aria-hidden="true"></div>
   <div class="cv-top">
     <div class="cv-eyebrow">♨ SHARE THE PLACES</div>
     <div class="cv-btns">
-      <button type="button" class="cv-btn" id="cvMap">地図</button>
-      <button type="button" class="cv-btn" id="cvNote">手帳</button>
       <button type="button" class="cv-btn adm" id="cvAdm" aria-label="管理ページ"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></button>
     </div>
   </div>
   <div class="cv-main">
+    <div class="cv-choices">
+      <button type="button" class="cv-choice" data-go="home"><svg width="34" height="14" viewBox="0 0 34 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="12" height="12"/><path d="M7 4v6M4 7h6"/><path d="M20 11L30 3M23 3h7v7"/></svg><b>RECENT<br>POSTS</b><span>最近の投稿</span></button>
+      <button type="button" class="cv-choice" data-go="map"><svg width="34" height="14" viewBox="0 0 34 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="12" height="12"/><path d="M7 4v6M4 7h6"/><path d="M20 11L30 3M23 3h7v7"/></svg><b>MAP OF<br>JAPAN</b><span>行った場所の地図</span></button>
+      <button type="button" class="cv-choice" data-go="post"><svg width="34" height="14" viewBox="0 0 34 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="12" height="12"/><path d="M7 4v6M4 7h6"/><path d="M20 11L30 3M23 3h7v7"/></svg><b>NEW<br>POST</b><span>投稿する</span></button>
+    </div>
     <svg class="cv-word" viewBox="0 0 100 62" role="img" aria-label="ODEKAKE NOTE ♨">
       <defs><linearGradient id="cvGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb27d"/><stop offset="1" stop-color="#e8743b"/></linearGradient></defs>
       <text class="l1" x="0" y="17.5" font-size="19.5" textLength="100" lengthAdjust="spacingAndGlyphs">ODEKAKE</text>
@@ -1230,8 +1244,13 @@ function coverStats(){
     setTimeout(()=>{introEl&&introEl.remove()},1000);
   }
   cover.addEventListener('click',()=>{if(introEl&&!introDone){endIntro();return}enter('map')});
-  $('#cvMap').addEventListener('click',e=>{e.stopPropagation();enter('map')});
-  $('#cvNote').addEventListener('click',e=>{e.stopPropagation();enter('home')});
+  cover.querySelectorAll('.cv-choice').forEach(b=>b.addEventListener('click',e=>{
+    e.stopPropagation();
+    if(introEl&&!introDone){endIntro();return}
+    const g=b.dataset.go;
+    enter(g==='post'?'home':g);
+    if(g==='post')setTimeout(()=>open(),700);
+  }));
   $('#cvAdm').addEventListener('click',e=>{e.stopPropagation();askAdmin(()=>enter('admin'))});
   // サウナの時計が1周するたびに、石へ水をかけてロウリュ。ときどき熱波師が出てくる
   function burst(){
