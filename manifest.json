@@ -1,9 +1,16 @@
 {
-  "name": "おでかけ手帳",
-  "short_name": "おでかけ手帳",
+  "name": "ODEKAKE NOTE ♨",
+  "short_name": "ODEKAKE NOTE",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#fbf6ef",
-  "theme_color": "#c8553d",
-  "icons": [{"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}]
+  "background_color": "#0b1c28",
+  "theme_color": "#0b1c28",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
 }
