@@ -799,6 +799,8 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 <p style="margin:0">♨ 家族と自動で共有中です。誰かが書いた記録は、みんなの手帳にも出ます。</p>
 <button type="button" class="btn" id="invite">家族を招待する(リンクを送る)</button>
 <p style="margin:0;font-size:12px;color:var(--ink-soft)">このリンクを知っている人は、誰でも記録を見たり書いたりできます。家族以外には送らないでください。</p>
+<label>別の手帳に参加する(もらった招待リンクを貼る)<input id="joinIn" placeholder="https://…/#f=…"></label>
+<button type="button" class="btn" id="joinBtn">この手帳に参加する</button>
 </div>
 <p id="localNote" style="margin:0">データはこのスマホの中だけに保存されています。家族に渡すときは「書き出し」でファイルを作って送ってください。</p>
 <p id="cstat" style="margin:0;font-size:12px;color:var(--ink-soft)"></p>
@@ -1182,6 +1184,15 @@ async function init(){
     if(mode!=='cloud'){mode='cloud';$('#cloudBox').hidden=false;$('#localNote').hidden=true;offerMigrate(fid)}
     render();
   },setStatus);
+  $('#joinBtn').onclick=()=>{
+    const m=$('#joinIn').value.match(/f=([A-Za-z0-9_-]{16,})|^\s*([A-Za-z0-9_-]{16,})\s*$/);
+    const id=m&&(m[1]||m[2]);
+    if(!id){alert('招待リンクをそのまま貼ってください。');return}
+    if(id===fid){alert('すでにこの手帳に参加しています。');return}
+    if(!confirm('招待された手帳に切り替えます。この端末の記録は、そのあと「家族の手帳に追加」できます。'))return;
+    try{localStorage.fid=id}catch(e){}
+    location.replace(location.pathname);
+  };
   $('#invite').onclick=async()=>{
     const url=location.origin+location.pathname+'#f='+fid;
     if(navigator.share){try{await navigator.share({title:'ODEKAKE NOTE ♨',text:'家族のODEKAKE NOTEに参加しよう',url});return}catch(e){if(e.name==='AbortError')return}}
