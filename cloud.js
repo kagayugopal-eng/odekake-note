@@ -1,4 +1,4 @@
-// 家族で記録を自動共有する部分(Firebase Firestore)
+// みんなで記録を自動共有する部分(Firebase Firestore)
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager,collection,doc,setDoc,deleteDoc,onSnapshot}
   from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';

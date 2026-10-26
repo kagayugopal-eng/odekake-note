@@ -557,7 +557,7 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 <div id="viewCover" class="cv" role="button" aria-label="タップしてはじめる">
   <div class="cv-glow" aria-hidden="true"></div>
   <div class="cv-top">
-    <div class="cv-eyebrow">♨ OUR FAMILY LOG</div>
+    <div class="cv-eyebrow">♨ SHARE THE PLACES</div>
     <div class="cv-btns">
       <button type="button" class="cv-btn" id="cvMap">地図</button>
       <button type="button" class="cv-btn" id="cvNote">手帳</button>
@@ -582,7 +582,7 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
         <ellipse cx="73.6" cy="53.6" rx="2.2" ry="1.7" fill="url(#cvGrad)" opacity=".75"/>
       </g>
     </svg>
-    <div class="cv-latin">FAMILY TRIPS &amp; SAUNA</div>
+    <div class="cv-latin">SHARE &amp; SAUNA</div>
     <div class="cv-stats" id="cvStats" aria-hidden="true">
       <div class="st"><b id="stRec">0</b><span>きろく</span></div>
       <div class="st"><b id="stPref">0</b><span>とどうふけん</span></div>
@@ -706,7 +706,7 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
   </div>
     </div>
     <div class="cv-bottom">
-      <div class="cv-sub">家族で行った場所を、<br>ひとつずつ書きためていく。</div>
+      <div class="cv-sub">行った場所を、<br>みんなでシェアする。</div>
       <div class="cv-go">♨ タップしてはじめる</div>
     </div>
   </div>
@@ -724,7 +724,7 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
     <div class="loyly"><span></span><span></span><span></span></div>
   </div>
   <div class="seal">♨</div>
-  <div class="headtext"><h1>ODEKAKE<br>NOTE ♨</h1><p>家族で行った場所を、ひとつずつ書きためていく記録帳。</p></div>
+  <div class="headtext"><h1>ODEKAKE<br>NOTE ♨</h1><p>行った場所を、みんなでシェアする場所。</p></div>
 </header>
 <div class="noren" aria-hidden="true"><span></span><span></span></div>
   <div class="mapCard">
@@ -828,16 +828,16 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 </form></dialog>
 <dialog id="bk"><form method="dialog">
 <div id="cloudBox" hidden>
-<p style="margin:0">♨ 家族と自動で共有中です。誰かが書いた記録は、みんなの手帳にも出ます。</p>
-<button type="button" class="btn" id="invite">家族を招待する(リンクを送る)</button>
-<p style="margin:0;font-size:12px;color:var(--ink-soft)">このリンクを知っている人は、誰でも記録を見たり書いたりできます。家族以外には送らないでください。</p>
+<p style="margin:0">♨ みんなと自動で共有中です。新しい投稿は、管理者が承認すると、みんなの手帳に出ます。</p>
+<button type="button" class="btn" id="invite">仲間を招待する(リンクを送る)</button>
+<p style="margin:0;font-size:12px;color:var(--ink-soft)">このリンクを知っている人は、誰でも記録を見たり投稿したりできます。知らない人には送らないでください。</p>
 <label>別の手帳に参加する(もらった招待リンクを貼る)<input id="joinIn" placeholder="https://…/#f=…"></label>
 <button type="button" class="btn" id="joinBtn">この手帳に参加する</button>
 </div>
-<p id="localNote" style="margin:0">データはこのスマホの中だけに保存されています。家族に渡すときは「書き出し」でファイルを作って送ってください。</p>
+<p id="localNote" style="margin:0">データはこのスマホの中だけに保存されています。ほかの人に渡すときは「書き出し」でファイルを作って送ってください。</p>
 <p id="cstat" style="margin:0;font-size:12px;color:var(--ink-soft)"></p>
 <button type="button" class="btn" id="exp">書き出し(ファイルを送る・保存)</button>
-<label>読み込み(家族からもらったファイル。今ある記録に追加されます)<input id="imp" type="file" accept=".json,application/json"></label>
+<label>読み込み(ほかの人からもらったファイル。今ある記録に追加されます)<input id="imp" type="file" accept=".json,application/json"></label>
 <button type="button" class="btn" id="admOpen">管理ページ(承認)</button>
 <button class="btn">閉じる</button>
 </form></dialog>
@@ -1060,7 +1060,7 @@ const tx=m=>db.transaction('e',m).objectStore('e');
 const lAll=()=>new Promise(r=>{const q=tx('readonly').getAll();q.onsuccess=()=>r(q.result.map(norm))});
 const lPut=o=>new Promise(r=>{const q=tx('readwrite').put(o);q.onsuccess=r});
 const lRm=id=>new Promise(r=>{const q=tx('readwrite').delete(id);q.onsuccess=r});
-// mode が cloud のときは家族と共有のデータベース、local のときはこのスマホの中だけ
+// mode が cloud のときはみんなと共有のデータベース、local のときはこのスマホの中だけ
 let mode='local',cloud=null,cloudList=[];
 const all=async()=>mode==='cloud'?cloudList.map(norm):lAll();
 const put=async o=>mode==='cloud'?cloud.put(o):lPut(o);
@@ -1293,14 +1293,14 @@ async function init(){
     const id=m&&(m[1]||m[2]);
     if(!id){alert('招待リンクをそのまま貼ってください。');return}
     if(id===fid){alert('すでにこの手帳に参加しています。');return}
-    if(!confirm('招待された手帳に切り替えます。この端末の記録は、そのあと「家族の手帳に追加」できます。'))return;
+    if(!confirm('招待された手帳に切り替えます。この端末の記録は、そのあと「共有の手帳に追加」できます。'))return;
     try{localStorage.fid=id}catch(e){}
     location.replace(location.pathname);
   };
   $('#invite').onclick=async()=>{
     const url=location.origin+location.pathname+'#f='+fid;
-    if(navigator.share){try{await navigator.share({title:'ODEKAKE NOTE ♨',text:'家族のODEKAKE NOTEに参加しよう',url});return}catch(e){if(e.name==='AbortError')return}}
-    try{await navigator.clipboard.writeText(url);alert('招待リンクをコピーしました。家族に送ってください。')}catch(e){prompt('このリンクを家族に送ってください',url)}
+    if(navigator.share){try{await navigator.share({title:'ODEKAKE NOTE ♨',text:'ODEKAKE NOTEに参加しよう',url});return}catch(e){if(e.name==='AbortError')return}}
+    try{await navigator.clipboard.writeText(url);alert('招待リンクをコピーしました。送りたい人に送ってください。')}catch(e){prompt('このリンクを、招待したい人に送ってください',url)}
   };
 }
 async function offerMigrate(fid){
@@ -1309,7 +1309,7 @@ async function offerMigrate(fid){
   const mine=await lAll();
   localStorage[key]=1;
   if(!mine.length)return;
-  if(confirm('この端末に保存されている記録('+mine.length+'件)を、家族の手帳にも追加しますか?'))mine.forEach(o=>cloud.put(o));
+  if(confirm('この端末に保存されている記録('+mine.length+'件)を、共有の手帳にも追加しますか?'))mine.forEach(o=>cloud.put(o));
 }
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
 </script></body></html>
