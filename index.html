@@ -543,6 +543,16 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 @media(prefers-reduced-motion:reduce){.cv-word .l1,.cv-word .l2,.cv-word .l3,.cv-latin,.cv-top,.cv-stats,.cv-bottom{animation:none;opacity:1;filter:none;transform:none}.cv-go{animation:none}}
 .headtext h1{font-family:"Dela Gothic One","Zen Kaku Gothic New",sans-serif;font-weight:400;font-size:20px;line-height:1.15;letter-spacing:.03em;margin:0 0 6px}
 .seal{font-family:"Zen Kaku Gothic New",sans-serif;font-size:30px}
+.cv-btn.adm{width:38px;padding:0;display:inline-flex;align-items:center;justify-content:center}
+.cv-eyebrow{min-width:0;font-size:9px}
+.admBar{display:block;width:100%;margin:0 0 12px;padding:11px 14px;border:0;border-radius:10px;background:var(--heat);color:var(--heat-ink);font:inherit;font-weight:700;cursor:pointer;box-shadow:var(--shadow)}
+.admH{font-family:"Zen Old Mincho",serif;font-size:16px;color:var(--waku);margin:14px 2px 10px}
+.admCard{background:var(--surface);border:1px solid var(--rule);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:12px}
+.admCard img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-bottom:1px solid var(--rule)}
+.admCard .b{padding:12px 14px}
+.admCard h3{font-family:"Zen Old Mincho",serif;font-size:16.5px;margin:0 0 2px}
+.admBtns{display:flex;gap:8px;padding:0 14px 14px}
+.admEmpty{color:var(--waku);text-align:center;border:1px dashed rgba(255,236,200,.4);border-radius:14px;padding:30px 16px;font-size:13px}
 </style></head><body>
 <div id="viewCover" class="cv" role="button" aria-label="タップしてはじめる">
   <div class="cv-glow" aria-hidden="true"></div>
@@ -551,6 +561,7 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
     <div class="cv-btns">
       <button type="button" class="cv-btn" id="cvMap">地図</button>
       <button type="button" class="cv-btn" id="cvNote">手帳</button>
+      <button type="button" class="cv-btn adm" id="cvAdm" aria-label="管理ページ"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></button>
     </div>
   </div>
   <div class="cv-main">
@@ -759,6 +770,7 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
     <button type="button" class="linkbtn mapExpandBtn" id="mapExpandBtn">都道府県から選んで見る ›</button>
     <p class="mapCredit">地図: Wikipedia「日本地図」をもとに作成</p>
   </div>
+<button type="button" class="admBar" id="admBar" hidden></button>
 <div id="filterChipWrap"></div>
 <div class="bar"><input id="q" placeholder="さがす(施設名・場所・メンバー・感想)"><button id="menu">バックアップ</button></div>
 <div id="list"></div>
@@ -794,6 +806,26 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 <div class="row"><button type="button" class="btn" id="cancel">閉じる</button><button type="button" class="btn d" id="del" hidden>削除</button><button class="btn p">保存</button></div>
 </form></dialog>
 
+<div id="viewAdmin" hidden>
+<div class="wrap">
+<header class="cover">
+  <div class="steam" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="seal">管</div>
+  <div class="headtext"><h1>ADMIN<br>♨</h1><p>みんなの投稿を確認して、手帳に載せるかを決めるページです。</p></div>
+</header>
+<div class="noren" aria-hidden="true"><span></span><span></span></div>
+<div class="bar"><button type="button" id="admBack">‹ 手帳にもどる</button><button type="button" id="admOut">ログアウト</button></div>
+<h2 class="admH">承認待ちの投稿 <span id="admCount"></span></h2>
+<div id="admList"></div>
+<button type="button" class="btn" id="admAll" style="margin-top:6px" hidden>すべて承認する</button>
+</div>
+</div>
+<dialog id="admDlg"><form id="admForm" method="dialog">
+<h2>管理ページ</h2>
+<label>パスワード<input id="admPw" type="password" autocomplete="current-password"></label>
+<p id="admErr" style="color:var(--danger);margin:0;font-size:12px;min-height:1em"></p>
+<div class="row"><button type="button" class="btn" id="admCancel">やめる</button><button type="submit" class="btn p">ひらく</button></div>
+</form></dialog>
 <dialog id="bk"><form method="dialog">
 <div id="cloudBox" hidden>
 <p style="margin:0">♨ 家族と自動で共有中です。誰かが書いた記録は、みんなの手帳にも出ます。</p>
@@ -806,12 +838,78 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 <p id="cstat" style="margin:0;font-size:12px;color:var(--ink-soft)"></p>
 <button type="button" class="btn" id="exp">書き出し(ファイルを送る・保存)</button>
 <label>読み込み(家族からもらったファイル。今ある記録に追加されます)<input id="imp" type="file" accept=".json,application/json"></label>
+<button type="button" class="btn" id="admOpen">管理ページ(承認)</button>
 <button class="btn">閉じる</button>
 </form></dialog>
 
 <script>
 const $=s=>document.querySelector(s);
 const FLAGS=[['loyly','ロウリュ'],['selfLoyly','セルフロウリュ'],['neppa','熱波'],['sotogaiyoku','外気浴']];
+const DEV=(()=>{try{return localStorage.dev||(localStorage.dev=crypto.randomUUID())}catch(e){return 'x'}})();
+const ADM={salt:"7beb0890ce403f395aea7ece110b815d",it:200000,hash:"d3e73cf0efe957f2e097c895bc0eea1d2e8b64bf35fbfdce82fd9c5d045cec81"};
+let rawCache=[];
+const isAdmin=()=>{try{return +localStorage.adm>Date.now()}catch(e){return false}};
+// 承認待ちの投稿は、書いた本人の端末にだけ表示する(承認されると、みんなに表示される)
+const visible=e=>e.status!=='pending'||e.authorDev===DEV;
+const hexBytes=h=>new Uint8Array(h.match(/../g).map(x=>parseInt(x,16)));
+async function pbk(pw){
+  const k=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']);
+  const bits=await crypto.subtle.deriveBits({name:'PBKDF2',salt:hexBytes(ADM.salt),iterations:ADM.it,hash:'SHA-256'},k,256);
+  return [...new Uint8Array(bits)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+let admCb=null,admFail=0,admLock=0;
+function askAdmin(cb){
+  if(isAdmin()){cb();return}
+  admCb=cb;$('#admPw').value='';$('#admErr').textContent='';$('#admDlg').showModal();setTimeout(()=>$('#admPw').focus(),60);
+}
+$('#admCancel').onclick=()=>{admCb=null;$('#admDlg').close()};
+$('#admForm').onsubmit=async e=>{
+  e.preventDefault();
+  if(Date.now()<admLock){$('#admErr').textContent='しばらくしてから、もう一度お試しください。';return}
+  let ok=false;
+  try{ok=(await pbk($('#admPw').value))===ADM.hash}catch(err){$('#admErr').textContent='この環境では確認できません。';return}
+  if(ok){
+    admFail=0;try{localStorage.adm=Date.now()+8*3600*1000}catch(err){}
+    $('#admDlg').close();const cb=admCb;admCb=null;if(cb)cb();render();
+  }else{
+    if(++admFail>=5){admLock=Date.now()+30000;admFail=0}
+    $('#admErr').textContent='パスワードがちがいます。';
+  }
+};
+function updateAdm(){
+  const pend=rawCache.filter(e=>e.status==='pending');
+  const bar=$('#admBar');
+  bar.hidden=!(isAdmin()&&pend.length);
+  bar.textContent='承認待ちの投稿が '+pend.length+' 件あります(タップして管理ページへ)';
+  if(!$('#viewAdmin').hidden)renderAdmin();
+}
+function renderAdmin(){
+  const pend=rawCache.filter(e=>e.status==='pending').sort((a,b)=>(a.updatedAt||0)-(b.updatedAt||0));
+  $('#admCount').textContent=pend.length?'('+pend.length+'件)':'';
+  $('#admAll').hidden=pend.length<2;
+  $('#admList').innerHTML=pend.length?pend.map(e=>`<div class="admCard" data-id="${esc(e.id)}">${e.photos&&e.photos[0]?`<img src="${e.photos[0]}" alt="">`:''}
+<div class="b"><h3>${esc(e.name)}</h3><div>${star(e.rating)}<span class="rv">${e.rating||''}</span></div>
+<div class="meta">${esc(e.date)}${e.prefecture?' ・ '+esc(e.prefecture):''}${e.members?' ・ '+esc(e.members):''}${e.photos&&e.photos.length>1?' ・ 写真'+e.photos.length+'枚':''}</div>
+${e.memo?`<p class="note">${esc(e.memo)}</p>`:''}</div>
+<div class="admBtns"><button type="button" class="btn p" data-act="ok">承認して載せる</button><button type="button" class="btn d" data-act="no">却下(削除)</button></div></div>`).join(''):'<p class="admEmpty">承認待ちの投稿はありません。</p>';
+}
+$('#admList').onclick=async e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const id=b.closest('.admCard').dataset.id,it=rawCache.find(x=>x.id===id);if(!it)return;
+  if(b.dataset.act==='ok'){await put({...it,status:'approved',updatedAt:Date.now()});render()}
+  else if(confirm('この投稿を却下して、削除しますか?')){await rm(id);render()}
+};
+$('#admAll').onclick=async()=>{
+  const p=rawCache.filter(e=>e.status==='pending');
+  if(!confirm(p.length+'件の投稿を、すべて承認しますか?'))return;
+  for(const it of p)await put({...it,status:'approved',updatedAt:Date.now()});
+  render();
+};
+$('#admBack').onclick=()=>showView('home');
+$('#admOut').onclick=()=>{try{delete localStorage.adm}catch(e){}showView('home');render()};
+$('#admBar').onclick=()=>showView('admin');
+$('#admOpen').onclick=()=>{$('#bk').close();askAdmin(()=>showView('admin'))};
+
   var REGIONS = [
     { name:"北海道・東北", prefs:[
       ["北海道",722,164],["青森県",647,334],["岩手県",676,410],["宮城県",657,484],
@@ -974,7 +1072,8 @@ const star=n=>`<span class="s" style="--p:${n/5*100}%">★★★★★</span>`;
 
 async function render(){
   const k=$('#q').value.trim().toLowerCase();
-  const every=(await all()).sort((x,y)=>x.date.localeCompare(y.date));
+  const raw=await all();rawCache=raw;
+  const every=raw.filter(visible).sort((x,y)=>x.date.localeCompare(y.date));
   const no=new Map(every.map((e,i)=>[e.id,i+1]));
   cache=every;
   let a=every.slice().reverse();
@@ -982,7 +1081,7 @@ async function render(){
   if(k)a=a.filter(e=>[e.name,e.prefecture,e.address,e.members,e.memo].join(' ').toLowerCase().includes(k));
   $('#list').innerHTML=a.length?a.map(e=>{
     const d=e.date.split('-');
-    const tags=[...FLAGS.filter(([f])=>e[f]).map(([,l])=>`<span class="tag heat">${l}</span>`),
+    const tags=[e.status==='pending'?'<span class="tag" style="background:var(--heat);color:#fff;border-color:transparent">承認待ち</span>':'',...FLAGS.filter(([f])=>e[f]).map(([,l])=>`<span class="tag heat">${l}</span>`),
       e.saunaTemp?`<span class="tag heat">サウナ ${esc(e.saunaTemp)}℃</span>`:'',
       e.mizuburoTemp?`<span class="tag cool">水風呂 ${esc(e.mizuburoTemp)}℃</span>`:'',
       e.prefecture?`<span class="tag">${esc(e.prefecture)}</span>`:''].join('');
@@ -992,7 +1091,7 @@ async function render(){
 <div style="margin-top:4px">${star(e.rating)}<span class="rv">${e.rating||''}</span></div>
 ${e.address||e.members?`<div class="meta">${esc(e.address)}${e.address&&e.members?' ・ ':''}${esc(e.members)}</div>`:''}
 ${tags?`<div class="tags">${tags}</div>`:''}${e.memo?`<p class="note">${esc(e.memo)}</p>`:''}</div></div></div>`}).join(''):`<p class="empty">${activePref?esc(activePref)+'の記録はまだありません。':'まだ記録がありません。<br>右下の＋から書き始めましょう。'}</p>`;
-  renderChip();renderMap();renderMapPage();coverStats();
+  renderChip();renderMap();renderMapPage();coverStats();updateAdm();
 }
 function facilityEntries(pref){
   const by={};
@@ -1033,7 +1132,8 @@ function renderMapPage(){
   $('#mapPageWrap').querySelectorAll('.pin').forEach((g,i)=>onAct(g,()=>{const e=cache.find(x=>x.id===placed[i].lastId);if(e)open(e)}));
 }
 function showView(v){
-  $('#viewMap').hidden=v!=='map';$('#viewHome').hidden=v!=='home';
+  $('#viewMap').hidden=v!=='map';$('#viewHome').hidden=v!=='home';$('#viewAdmin').hidden=v!=='admin';
+  if(v==='admin')renderAdmin();
   scrollTo(0,0);
 }
 $('#mapExpandBtn').onclick=()=>{mapSel=null;renderMapPage();showView('map')};
@@ -1083,7 +1183,10 @@ $('#f').onsubmit=async()=>{
     saunaTemp:f.saunaTemp.value?+f.saunaTemp.value:'',mizuburoTemp:f.mizuburoTemp.value?+f.mizuburoTemp.value:'',updatedAt:Date.now()};
   for(const [k] of FLAGS)o[k]=f[k].checked;
   delete o.photo;delete o.facility;delete o.note;
+  if(!cur){o.status=isAdmin()?'approved':'pending';o.authorDev=DEV}
+  const waiting=!cur&&o.status==='pending';
   await put(o);render();
+  if(waiting)alert('投稿ありがとうございます。\n管理者が承認すると、みんなの手帳に表示されます。');
 };
 $('#del').onclick=async()=>{if(confirm('この記録を削除しますか?')){await rm(cur.id);$('#edit').close();render()}};
 
@@ -1095,9 +1198,9 @@ $('#exp').onclick=async()=>{
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=file.name;a.click();
 };
 $('#imp').onchange=async e=>{
-  try{const list=JSON.parse(await e.target.files[0].text());let n=0;
-    for(const o of list){const x=norm(o);if(x.id&&x.name&&x.date){delete x.photo;delete x.facility;delete x.note;await put(x);n++}}
-    alert(n+'件を読み込みました');render();$('#bk').close();
+  try{const list=JSON.parse(await e.target.files[0].text());let n=0,pend=0;
+    for(const o of list){const x=norm(o);if(x.id&&x.name&&x.date){delete x.photo;delete x.facility;delete x.note;if(!isAdmin()){x.status='pending';x.authorDev=DEV;pend++}await put(x);n++}}
+    alert(n+'件を読み込みました'+(pend?'\n管理者の承認後に、みんなの手帳に表示されます。':''));render();$('#bk').close();
   }catch{alert('読み込めないファイルです')}
   e.target.value='';
 };
@@ -1129,6 +1232,7 @@ function coverStats(){
   cover.addEventListener('click',()=>{if(introEl&&!introDone){endIntro();return}enter('map')});
   $('#cvMap').addEventListener('click',e=>{e.stopPropagation();enter('map')});
   $('#cvNote').addEventListener('click',e=>{e.stopPropagation();enter('home')});
+  $('#cvAdm').addEventListener('click',e=>{e.stopPropagation();askAdmin(()=>enter('admin'))});
   // サウナの時計が1周するたびに、石へ水をかけてロウリュ。ときどき熱波師が出てくる
   function burst(){
     if(entered)return;
