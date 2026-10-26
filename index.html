@@ -860,7 +860,7 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 const $=s=>document.querySelector(s);
 const FLAGS=[['loyly','ロウリュ'],['selfLoyly','セルフロウリュ'],['neppa','熱波'],['sotogaiyoku','外気浴']];
 const DEV=(()=>{try{return localStorage.dev||(localStorage.dev=crypto.randomUUID())}catch(e){return 'x'}})();
-const ADM={salt:"7beb0890ce403f395aea7ece110b815d",it:200000,hash:"d3e73cf0efe957f2e097c895bc0eea1d2e8b64bf35fbfdce82fd9c5d045cec81"};
+const ADM={salt:"3e5edfc4d4768220335b555385ab652f",it:200000,hash:"938eaab3632ada0d726d84ed475d3812e25074b61bc5c80d97b377c7b1baf4f5"};
 let rawCache=[];
 const isAdmin=()=>{try{return +localStorage.adm>Date.now()}catch(e){return false}};
 // 承認待ちの投稿は、書いた本人の端末にだけ表示する(承認されると、みんなに表示される)
