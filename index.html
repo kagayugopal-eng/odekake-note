@@ -644,6 +644,7 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 .dtFoot{margin-top:18px;display:flex;justify-content:flex-end}
 .dtFoot button{background:none;border:none;color:var(--ink-faint);text-decoration:underline;font:inherit;font-size:12px;cursor:pointer}
 @media(prefers-reduced-motion:reduce){.tpheat span,.water .rip,.water .bub,.water .wave{animation:none;opacity:.3}.tp.done .tv b{animation:none!important}}
+.admBox{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:14px;display:grid;gap:12px;box-shadow:var(--shadow)}
 </style></head><body>
 <div id="viewCover" class="cv" role="button" aria-label="タップしてはじめる">
   <div class="cv-glow" aria-hidden="true"></div>
@@ -872,8 +873,9 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 </div>
 <div id="tabList">
 <div id="filterChipWrap"></div>
-<div class="bar"><input id="q" placeholder="さがす(施設名・場所・メンバー・感想)"><button id="menu">バックアップ</button></div>
+<div class="bar"><input id="q" placeholder="さがす(施設名・場所・メンバー・感想)"></div>
 <div id="list"></div>
+<div style="text-align:center;margin:18px 0 90px"><button type="button" class="linkbtn" id="joinOpen" style="color:var(--waku-soft);font-size:12.5px">招待リンクから参加する</button></div>
 </div>
 </div>
 <button id="fab" aria-label="追加">＋</button>
@@ -925,6 +927,18 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 <h2 class="admH">承認待ちの投稿 <span id="admCount"></span></h2>
 <div id="admList"></div>
 <button type="button" class="btn" id="admAll" style="margin-top:6px" hidden>すべて承認する</button>
+<h2 class="admH">バックアップ・共有</h2>
+<div class="admBox">
+<div id="cloudBox" hidden>
+<p style="margin:0">♨ みんなと自動で共有中です。新しい投稿は、管理者が承認すると、みんなの手帳に出ます。</p>
+<button type="button" class="btn" id="invite" style="margin-top:10px">仲間を招待する(リンクを送る)</button>
+<p style="margin:8px 0 0;font-size:12px;color:var(--ink-soft)">このリンクを知っている人は、誰でも記録を見たり投稿したりできます。知らない人には送らないでください。</p>
+</div>
+<p id="localNote" style="margin:0">データはこのスマホの中だけに保存されています。ほかの人に渡すときは「書き出し」でファイルを作って送ってください。</p>
+<p id="cstat" style="margin:0;font-size:12px;color:var(--ink-soft)"></p>
+<button type="button" class="btn" id="exp">書き出し(ファイルを送る・保存)</button>
+<label>読み込み(ほかの人からもらったファイル。今ある記録に追加されます)<input id="imp" type="file" accept=".json,application/json"></label>
+</div>
 </div>
 </div>
 <dialog id="admDlg"><form id="admForm" method="dialog">
@@ -933,19 +947,11 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 <p id="admErr" style="color:var(--danger);margin:0;font-size:12px;min-height:1em"></p>
 <div class="row"><button type="button" class="btn" id="admCancel">やめる</button><button type="submit" class="btn p">ひらく</button></div>
 </form></dialog>
-<dialog id="bk"><form method="dialog">
-<div id="cloudBox" hidden>
-<p style="margin:0">♨ みんなと自動で共有中です。新しい投稿は、管理者が承認すると、みんなの手帳に出ます。</p>
-<button type="button" class="btn" id="invite">仲間を招待する(リンクを送る)</button>
-<p style="margin:0;font-size:12px;color:var(--ink-soft)">このリンクを知っている人は、誰でも記録を見たり投稿したりできます。知らない人には送らないでください。</p>
-<label>別の手帳に参加する(もらった招待リンクを貼る)<input id="joinIn" placeholder="https://…/#f=…"></label>
-<button type="button" class="btn" id="joinBtn">この手帳に参加する</button>
-</div>
-<p id="localNote" style="margin:0">データはこのスマホの中だけに保存されています。ほかの人に渡すときは「書き出し」でファイルを作って送ってください。</p>
-<p id="cstat" style="margin:0;font-size:12px;color:var(--ink-soft)"></p>
-<button type="button" class="btn" id="exp">書き出し(ファイルを送る・保存)</button>
-<label>読み込み(ほかの人からもらったファイル。今ある記録に追加されます)<input id="imp" type="file" accept=".json,application/json"></label>
-<button type="button" class="btn" id="admOpen">管理ページ(承認)</button>
+<dialog id="joinDlg"><form method="dialog">
+<h2>招待リンクから参加する</h2>
+<p style="margin:0;font-size:12px;color:var(--ink-soft)">もらった招待リンクを、そのまま貼ってください。リンクを開いても手帳に入れなかったときも、ここから参加できます。</p>
+<label>招待リンク<input id="joinIn" placeholder="https://…/#f=…"></label>
+<button type="button" class="btn p" id="joinBtn">この手帳に参加する</button>
 <button class="btn">閉じる</button>
 </form></dialog>
 
@@ -1019,7 +1025,7 @@ $('#toCover').onclick=()=>window.openCover();
 $('#mapToCover').onclick=()=>window.openCover();
 $('#admOut').onclick=()=>{try{delete localStorage.adm}catch(e){}showView('home');render()};
 $('#admBar').onclick=()=>showView('admin');
-$('#admOpen').onclick=()=>{$('#bk').close();askAdmin(()=>showView('admin'))};
+
 
   var REGIONS = [
     { name:"北海道・東北", prefs:[
@@ -1397,7 +1403,7 @@ $('#f').onsubmit=async()=>{
 };
 $('#del').onclick=async()=>{if(confirm('この記録を削除しますか?')){await rm(cur.id);$('#edit').close();render()}};
 
-$('#menu').onclick=()=>$('#bk').showModal();
+$('#joinOpen').onclick=()=>$('#joinDlg').showModal();
 $('#exp').onclick=async()=>{
   const blob=new Blob([JSON.stringify(await all())],{type:'application/json'});
   const file=new File([blob],'odekake-note.json',{type:'application/json'});
@@ -1407,7 +1413,7 @@ $('#exp').onclick=async()=>{
 $('#imp').onchange=async e=>{
   try{const list=JSON.parse(await e.target.files[0].text());let n=0,pend=0;
     for(const o of list){const x=norm(o);if(x.id&&x.name&&x.date){delete x.photo;delete x.facility;delete x.note;if(!isAdmin()){x.status='pending';x.authorDev=DEV;pend++}await put(x);n++}}
-    alert(n+'件を読み込みました'+(pend?'\n管理者の承認後に、みんなの手帳に表示されます。':''));render();$('#bk').close();
+    alert(n+'件を読み込みました'+(pend?'\n管理者の承認後に、みんなの手帳に表示されます。':''));render();
   }catch{alert('読み込めないファイルです')}
   e.target.value='';
 };
