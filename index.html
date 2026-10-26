@@ -570,6 +570,7 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
   <div class="cv-top">
     <div class="cv-eyebrow">♨ SHARE THE PLACES</div>
     <div class="cv-btns">
+      <button type="button" class="cv-btn" id="cvBack" hidden>‹ もどる</button>
       <button type="button" class="cv-btn adm" id="cvAdm" aria-label="管理ページ"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></button>
     </div>
   </div>
@@ -727,7 +728,7 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 </div>
 <div id="viewHome" hidden>
 <div class="wrap">
-<button type="button" class="backBtn" id="toCover">‹ 表紙にもどる</button>
+<button type="button" class="backBtn js-back" hidden>‹ 戻る</button><button type="button" class="backBtn" id="toCover" style="margin-left:14px">表紙</button>
 <header class="cover">
   <div class="steam" aria-hidden="true"><span></span><span></span><span></span></div>
   <div class="stove" aria-hidden="true">
@@ -798,7 +799,7 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
     <div class="spotBeam b2"></div>
     <svg class="sparkles" viewBox="0 0 400 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><circle cx="319.6" cy="293.3" r="1.53" style="animation-duration:2.92s;animation-delay:0.4s;--peak:0.79"/><circle cx="223.2" cy="550.2" r="1.32" style="animation-duration:2.61s;animation-delay:1.75s;--peak:0.94"/><circle cx="11.3" cy="861.5" r="1.38" style="animation-duration:2.9s;animation-delay:1.78s;--peak:0.93"/><circle cx="73.1" cy="289.3" r="1.19" style="animation-duration:2.85s;animation-delay:1.87s;--peak:0.68"/><circle cx="76.7" cy="72.9" r="1.44" style="animation-duration:2.5s;animation-delay:1.53s;--peak:0.88"/><circle cx="30.5" cy="755.5" r="3.16" style="animation-duration:2.78s;animation-delay:2.6s;--peak:0.94"/><circle cx="38.0" cy="415.1" r="1.17" style="animation-duration:2.85s;animation-delay:1.88s;--peak:0.64"/><circle cx="177.9" cy="699.2" r="2.21" style="animation-duration:1.79s;animation-delay:3.28s;--peak:0.62"/><circle cx="337.2" cy="876.6" r="2.65" style="animation-duration:3.11s;animation-delay:1.86s;--peak:0.69"/><circle cx="188.9" cy="664.3" r="2.69" style="animation-duration:2.21s;animation-delay:3.32s;--peak:0.61"/><circle cx="198.3" cy="35.5" r="1.79" style="animation-duration:3.18s;animation-delay:0.41s;--peak:0.99"/><circle cx="362.0" cy="619.4" r="1.12" style="animation-duration:2.35s;animation-delay:2.42s;--peak:0.64"/><circle cx="119.3" cy="82.6" r="2.86" style="animation-duration:3.06s;animation-delay:3.23s;--peak:0.9"/><circle cx="230.2" cy="56.0" r="2.06" style="animation-duration:2.82s;animation-delay:2.65s;--peak:0.61"/><circle cx="3.3" cy="79.3" r="3.03" style="animation-duration:1.78s;animation-delay:1.37s;--peak:0.79"/><circle cx="353.5" cy="122.1" r="1.58" style="animation-duration:2.84s;animation-delay:0.3s;--peak:0.67"/><circle cx="10.0" cy="862.4" r="1.51" style="animation-duration:2.4s;animation-delay:1.33s;--peak:0.99"/><circle cx="284.8" cy="541.0" r="2.08" style="animation-duration:2.03s;animation-delay:2.94s;--peak:0.64"/><circle cx="248.7" cy="265.5" r="1.61" style="animation-duration:2.33s;animation-delay:0.66s;--peak:0.84"/><circle cx="28.3" cy="16.9" r="1.31" style="animation-duration:1.74s;animation-delay:3.07s;--peak:0.8"/><circle cx="271.5" cy="701.1" r="1.36" style="animation-duration:3.12s;animation-delay:1.35s;--peak:0.78"/><circle cx="195.3" cy="625.7" r="2.69" style="animation-duration:1.91s;animation-delay:2.9s;--peak:0.77"/><circle cx="100.4" cy="777.9" r="2.92" style="animation-duration:2.97s;animation-delay:1.13s;--peak:0.97"/><circle cx="310.3" cy="873.1" r="2.66" style="animation-duration:3.2s;animation-delay:1.67s;--peak:0.9"/><circle cx="312.5" cy="472.0" r="2.11" style="animation-duration:2.24s;animation-delay:3.04s;--peak:0.75"/><circle cx="298.6" cy="505.7" r="2.56" style="animation-duration:2.09s;animation-delay:0.28s;--peak:0.87"/><circle cx="58.0" cy="323.6" r="2.72" style="animation-duration:1.68s;animation-delay:3.19s;--peak:0.84"/><circle cx="224.4" cy="609.4" r="1.13" style="animation-duration:1.64s;animation-delay:2.52s;--peak:0.83"/><circle cx="255.8" cy="740.9" r="1.6" style="animation-duration:1.86s;animation-delay:3.39s;--peak:0.62"/><circle cx="206.3" cy="561.6" r="3.1" style="animation-duration:1.74s;animation-delay:2.46s;--peak:0.63"/><circle cx="181.5" cy="558.2" r="2.87" style="animation-duration:1.68s;animation-delay:2.62s;--peak:0.66"/><circle cx="161.9" cy="883.1" r="2.87" style="animation-duration:1.72s;animation-delay:0.02s;--peak:0.61"/><circle cx="312.3" cy="34.5" r="2.73" style="animation-duration:2.89s;animation-delay:2.86s;--peak:0.97"/><circle cx="253.3" cy="742.5" r="2.19" style="animation-duration:2.67s;animation-delay:0.24s;--peak:0.82"/><circle cx="396.1" cy="349.3" r="2.57" style="animation-duration:1.89s;animation-delay:1.69s;--peak:0.82"/><circle cx="307.8" cy="290.2" r="2.03" style="animation-duration:1.9s;animation-delay:2.02s;--peak:0.98"/><circle cx="154.7" cy="593.4" r="2.22" style="animation-duration:1.91s;animation-delay:2.44s;--peak:0.68"/><circle cx="245.5" cy="894.7" r="1.67" style="animation-duration:2.67s;animation-delay:1.19s;--peak:0.86"/><circle cx="76.5" cy="450.6" r="2.73" style="animation-duration:1.94s;animation-delay:1.24s;--peak:0.69"/><circle cx="63.2" cy="603.2" r="2.83" style="animation-duration:2.44s;animation-delay:1.56s;--peak:0.72"/><circle cx="95.7" cy="848.1" r="2.06" style="animation-duration:2.69s;animation-delay:0.98s;--peak:0.67"/><circle cx="3.7" cy="266.3" r="1.92" style="animation-duration:2.43s;animation-delay:2.16s;--peak:0.88"/><circle cx="350.6" cy="721.8" r="2.51" style="animation-duration:2.89s;animation-delay:1.9s;--peak:0.79"/><circle cx="366.1" cy="804.3" r="1.85" style="animation-duration:2.99s;animation-delay:1.5s;--peak:0.9"/><circle cx="9.7" cy="535.2" r="3.08" style="animation-duration:2.3s;animation-delay:3.05s;--peak:0.87"/><circle cx="8.2" cy="68.8" r="1.73" style="animation-duration:3.15s;animation-delay:2.3s;--peak:0.84"/><circle cx="344.0" cy="315.2" r="1.32" style="animation-duration:2.31s;animation-delay:3.18s;--peak:0.67"/><circle cx="197.1" cy="264.6" r="1.79" style="animation-duration:1.75s;animation-delay:3.18s;--peak:0.7"/><circle cx="315.6" cy="155.7" r="1.94" style="animation-duration:1.64s;animation-delay:2.06s;--peak:0.8"/><circle cx="172.7" cy="180.4" r="2.4" style="animation-duration:1.66s;animation-delay:3.27s;--peak:0.79"/><circle cx="244.4" cy="382.0" r="1.05" style="animation-duration:1.65s;animation-delay:2.54s;--peak:0.79"/><circle cx="111.1" cy="483.9" r="2.92" style="animation-duration:2.42s;animation-delay:1.81s;--peak:0.83"/><circle cx="349.4" cy="28.4" r="2.46" style="animation-duration:2.52s;animation-delay:2.51s;--peak:0.67"/><circle cx="331.5" cy="714.2" r="1.61" style="animation-duration:3.12s;animation-delay:0.18s;--peak:0.82"/><circle cx="34.6" cy="169.7" r="2.4" style="animation-duration:2.73s;animation-delay:1.68s;--peak:0.7"/><circle cx="218.0" cy="403.6" r="1.84" style="animation-duration:2.26s;animation-delay:1.62s;--peak:0.75"/><circle cx="49.0" cy="447.2" r="1.62" style="animation-duration:2.87s;animation-delay:3.34s;--peak:0.9"/><circle cx="131.9" cy="429.0" r="2.63" style="animation-duration:1.97s;animation-delay:2.8s;--peak:0.62"/><circle cx="387.1" cy="501.3" r="2.7" style="animation-duration:2.56s;animation-delay:2.97s;--peak:0.77"/><circle cx="36.4" cy="185.4" r="2.64" style="animation-duration:3.17s;animation-delay:0.8s;--peak:0.79"/></svg>
   </div>
-  <button type="button" class="backBtn" id="mapToCover" style="margin-right:14px">‹ 表紙</button><button type="button" class="backBtn" id="mapPageBack">記録帳をひらく ›</button>
+  <button type="button" class="backBtn js-back" hidden style="margin-right:14px">‹ 戻る</button><button type="button" class="backBtn" id="mapToCover" style="margin-right:14px">表紙</button><button type="button" class="backBtn" id="mapPageBack">記録帳をひらく ›</button>
   <h2 class="mapPageTitle">ODEKAKE MAP</h2>
   <div class="mapChipRow" id="mapChipRow"></div>
   <div class="mapWrap" id="mapPageWrap"></div>
@@ -829,7 +830,7 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
   <div class="headtext"><h1>ADMIN<br>♨</h1><p>みんなの投稿を確認して、手帳に載せるかを決めるページです。</p></div>
 </header>
 <div class="noren" aria-hidden="true"><span></span><span></span></div>
-<div class="bar"><button type="button" id="admToCover">‹ 表紙</button><button type="button" id="admBack">手帳</button><button type="button" id="admOut">ログアウト</button></div>
+<div class="bar"><button type="button" class="js-back" hidden>‹ 戻る</button><button type="button" id="admToCover">表紙</button><button type="button" id="admBack">手帳</button><button type="button" id="admOut">ログアウト</button></div>
 <h2 class="admH">承認待ちの投稿 <span id="admCount"></span></h2>
 <div id="admList"></div>
 <button type="button" class="btn" id="admAll" style="margin-top:6px" hidden>すべて承認する</button>
@@ -921,6 +922,7 @@ $('#admAll').onclick=async()=>{
   render();
 };
 $('#admBack').onclick=()=>showView('home');
+document.querySelectorAll('.js-back').forEach(b=>b.addEventListener('click',goBack));
 $('#admToCover').onclick=()=>window.openCover();
 $('#toCover').onclick=()=>window.openCover();
 $('#mapToCover').onclick=()=>window.openCover();
@@ -1149,11 +1151,33 @@ function renderMapPage(){
   $('#mapPageWrap').innerHTML=placed.length?'<svg viewBox="'+vb+'" role="img" aria-label="ODEKAKE MAP">'+ISLANDS_SVG+placed.map((p,i)=>mapPinSvg(p,i,false)).join('')+'</svg>':'';
   $('#mapPageWrap').querySelectorAll('.pin').forEach((g,i)=>onAct(g,()=>{const e=cache.find(x=>x.id===placed[i].lastId);if(e)open(e)}));
 }
-function showView(v){
+let curView='cover',histOK=true;const viewStack=[];
+function applyView(v){
   $('#viewMap').hidden=v!=='map';$('#viewHome').hidden=v!=='home';$('#viewAdmin').hidden=v!=='admin';
+  if(v==='cover'){if(window.openCoverUI)window.openCoverUI()}
+  else{const c=$('#viewCover');if(c)c.hidden=true}
   if(v==='admin')renderAdmin();
+  document.querySelectorAll('.js-back').forEach(b=>b.hidden=!viewStack.length);
   scrollTo(0,0);
 }
+// 画面を切り替えるたびに履歴を積む。「戻る」ボタンや、スマホの戻る操作で、ひとつ前の画面にもどる
+function showView(v){
+  if(v==='none')v='cover';
+  if(v!==curView){
+    viewStack.push(curView);
+    try{history.pushState({vs:viewStack.length},'')}catch(e){histOK=false}
+  }
+  curView=v;applyView(v);
+}
+function popView(){
+  if(!viewStack.length)return;
+  curView=viewStack.pop();applyView(curView);
+}
+function goBack(){
+  if(!viewStack.length)return;
+  if(histOK)history.back();else popView();
+}
+addEventListener('popstate',popView);
 $('#mapExpandBtn').onclick=()=>{mapSel=null;renderMapPage();showView('map')};
 $('#mapPageBack').onclick=()=>showView('home');
 $('#q').oninput=render;
@@ -1271,13 +1295,16 @@ function coverStats(){
     if(tick===0)burst();
   }
   // どの画面からでも表紙にもどれる(演出は短く)
-  window.openCover=function(){
+  window.openCoverUI=function(){
     entered=false;introDone=true;introEl=null;
     try{sessionStorage.removeItem('coverSeen')}catch(e){}
     cover.hidden=false;cover.classList.remove('hide');cover.classList.add('noIntro');
-    showView('none');coverStats();scrollTo(0,0);cover.scrollTop=0;
+    $('#cvBack').hidden=!viewStack.length;
+    coverStats();cover.scrollTop=0;
     clearInterval(timer);timer=setInterval(step,255);
   };
+  window.openCover=()=>showView('cover');
+  $('#cvBack').addEventListener('click',e=>{e.stopPropagation();goBack()});
   if(entered)return;
   if(reduce){cover.classList.add('noIntro');coverStats();timer=setInterval(step,255);return}
   // オープニング: サウナの温度が上がっていき、ロウリュの白い湯気がたちこめて、表紙があらわれる
