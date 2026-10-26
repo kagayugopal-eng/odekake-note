@@ -496,7 +496,7 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 .cv-btn:active{transform:scale(.97);background:var(--cv-ember);border-color:var(--cv-ember);color:#1a0b04}
 .cv-main{position:relative;width:min(100%,46vh);margin:0 auto}
 .cv-word{display:block;width:100%;height:auto;overflow:visible}
-.cv-word text{font-family:"Dela Gothic One","Zen Kaku Gothic New",sans-serif;fill:var(--cv-cream)}
+.cv-word .l1{fill:var(--cv-cream)}
 .cv-word .l2{fill:url(#cvGrad)}
 .cv-latin{margin:6px 2px 14px;font-size:11px;font-weight:700;letter-spacing:.5em;color:var(--cv-ember)}
 .cv-stats{display:flex;gap:10px;margin-bottom:26px}
@@ -508,7 +508,11 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 .cv-go{display:inline-flex;align-items:center;gap:6px;background:var(--cv-ember);color:#1a0b04;font-weight:700;font-size:12px;letter-spacing:.08em;border-radius:999px;padding:11px 16px;white-space:nowrap;animation:cvPulse 2.2s ease-in-out infinite}
 @keyframes cvPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,116,59,.55)}50%{box-shadow:0 0 0 9px rgba(232,116,59,0)}}
 /* 湯気の中から文字が浮かぶ */
-.cv-word .l1,.cv-word .l2,.cv-word .l3,.cv-latin{opacity:0;filter:blur(14px);animation:cvEmerge 1.5s ease-out forwards;animation-delay:2.25s}
+.cv-word .l1,.cv-word .l2,.cv-word .l3{opacity:0;animation:cvEmergeS 1.4s ease-out forwards;animation-delay:2.25s}
+.cv-latin{opacity:0;filter:blur(14px);animation:cvEmerge 1.5s ease-out forwards;animation-delay:2.25s}
+.cv-word{animation:cvBlurIn 1.5s ease-out 2.2s backwards}
+@keyframes cvEmergeS{0%{opacity:0;transform:translateY(5px)}100%{opacity:1;transform:none}}
+@keyframes cvBlurIn{from{filter:blur(10px)}to{filter:blur(0)}}
 .cv-word .l2{animation-delay:2.4s}.cv-word .l3{animation-delay:2.55s}.cv-latin{animation-delay:2.7s}
 .cv-top,.cv-stats,.cv-bottom{animation:cvFade .9s ease 2.6s both}
 .cv-stats{animation-delay:2.75s}.cv-bottom{animation-delay:2.95s}
@@ -645,6 +649,25 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 .dtFoot button{background:none;border:none;color:var(--ink-faint);text-decoration:underline;font:inherit;font-size:12px;cursor:pointer}
 @media(prefers-reduced-motion:reduce){.tpheat span,.water .rip,.water .bub,.water .wave{animation:none;opacity:.3}.tp.done .tv b{animation:none!important}}
 .admBox{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:14px;display:grid;gap:12px;box-shadow:var(--shadow)}
+/* ロウリュの湯気: 濃い塊ではなく、ふわっと薄く。文字やタイルの後ろに回す */
+.cv-scene{z-index:0}
+.cv-choices,.cv-word,.cv-latin,.cv-stats,.cv-bottom{position:relative;z-index:2}
+.cv-scene .steamRise span{background:radial-gradient(circle,rgba(250,253,255,.5),rgba(250,253,255,.2) 55%,rgba(250,253,255,0) 78%);filter:blur(14px);animation-name:cvSteam;animation-duration:3.4s}
+@keyframes cvSteam{0%{transform:translateY(0) scale(.6);opacity:0}18%{opacity:.5}60%{transform:translateY(-170px) scale(1.5);opacity:.28}100%{transform:translateY(-290px) scale(2);opacity:0}}
+.cv-scene .splashPuffs span{background:radial-gradient(circle,rgba(250,253,255,.55),rgba(250,253,255,.18) 58%,rgba(250,253,255,0) 78%)}
+/* パソコンなど横長の画面: 左に大きなロゴ、右に選択肢・数字・サウナの場面 */
+@media (min-width:900px) and (min-aspect-ratio:3/2){
+ .cv-main{width:min(100%,1240px);display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);grid-template-areas:"word choices" "word stats" "latin scene" "bottom bottom";column-gap:64px;align-items:center}
+ .cv-word{grid-area:word;align-self:end}
+ .cv-latin{grid-area:latin;margin:6px 2px 0}
+ .cv-choices{grid-area:choices;margin-bottom:24px}
+ .cv-stats{grid-area:stats;margin-bottom:12px}
+ .cv-scene{grid-area:scene;height:82px;margin-top:0}
+ .cv-bottom{grid-area:bottom;margin-top:28px}
+ .cv-choice{padding:16px 16px 18px}.cv-choice b{font-size:12px}.cv-choice span{font-size:12px}
+ .cv-stats b{font-size:36px}.cv-stats span{font-size:11px}
+ .cv-sub{font-size:14px}.cv-go{font-size:14px;padding:13px 22px}
+}
 </style></head><body>
 <div id="viewCover" class="cv" role="button" aria-label="タップしてはじめる">
   <div class="cv-glow" aria-hidden="true"></div>
@@ -663,8 +686,8 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
     </div>
     <svg class="cv-word" viewBox="0 0 100 62" role="img" aria-label="ODEKAKE NOTE ♨">
       <defs><linearGradient id="cvGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb27d"/><stop offset="1" stop-color="#e8743b"/></linearGradient></defs>
-      <text class="l1" x="0" y="17.5" font-size="19.5" textLength="100" lengthAdjust="spacingAndGlyphs">ODEKAKE</text>
-      <text class="l2" x="0" y="60" font-size="50" textLength="71" lengthAdjust="spacingAndGlyphs">NOTE</text>
+      <path class="l1" d="M0 10.23Q0 6.73 1.71 4.76Q3.42 2.79 7.07 2.79Q10.74 2.79 12.45 4.76Q14.16 6.73 14.16 10.23Q14.16 13.8 12.46 15.75Q10.76 17.7 7.07 17.7Q3.43 17.7 1.72 15.74Q0 13.78 0 10.23ZM10.39 10.23Q10.39 8.5 9.61 7.65Q8.84 6.8 7.07 6.8Q5.32 6.8 4.54 7.65Q3.77 8.5 3.77 10.23Q3.77 11.98 4.54 12.83Q5.32 13.68 7.07 13.68Q8.84 13.68 9.61 12.84Q10.39 12 10.39 10.23ZM28.35 10.25Q28.35 12.44 27.55 14.07Q26.76 15.71 25.17 16.6Q23.58 17.5 21.26 17.5Q19.85 17.5 18.39 17.5Q16.92 17.5 15.43 17.48Q15.56 13.6 15.56 10.25Q15.56 6.86 15.43 3.18Q17.32 2.98 20.51 2.98Q23.5 2.98 25.23 3.88Q26.97 4.78 27.66 6.36Q28.35 7.95 28.35 10.25ZM21.71 13.58Q23.18 13.58 23.68 12.69Q24.17 11.81 24.17 10.25Q24.17 8.75 23.65 7.83Q23.14 6.9 21.71 6.9Q20.17 6.9 19.4 7.02V13.58ZM33.37 13.9Q39.41 13.86 42.13 13.68Q42.01 14.49 41.99 15.34Q41.97 16.2 41.97 17.5H29.62Q29.75 13.68 29.75 10.35Q29.75 7.02 29.62 3.2H41.97V6.77H33.37V8.66Q34.13 8.68 35.63 8.68Q38.15 8.68 40.85 8.56V11.95Q38.15 11.83 35.63 11.83Q34.13 11.83 33.37 11.85ZM51.69 17.5Q50.95 15.83 49.21 12.38L47.35 14.66V17.5H43.4Q43.52 13.68 43.52 10.35Q43.52 7.02 43.4 3.2H47.35V8.97Q50.28 5.39 51.52 3.2H56.67L51.66 9.35Q52.77 11.28 54.16 13.54Q55.55 15.81 56.68 17.5ZM67.98 17.5Q67.68 16.38 67.17 14.68H62.1L61.31 17.5H57.32L61.77 3.2H67.61L72.1 17.5ZM66.26 11.61Q65.66 9.54 65.02 7.47L64.64 6.19Q64.09 7.99 63.01 11.61ZM81.23 17.5Q80.49 15.83 78.75 12.38L76.89 14.66V17.5H72.94Q73.07 13.68 73.07 10.35Q73.07 7.02 72.94 3.2H76.89V8.97Q79.82 5.39 81.06 3.2H86.21L81.2 9.35Q82.31 11.28 83.7 13.54Q85.09 15.81 86.22 17.5ZM91.24 13.9Q97.28 13.86 100 13.68Q99.89 14.49 99.86 15.34Q99.84 16.2 99.84 17.5H87.49Q87.62 13.68 87.62 10.35Q87.62 7.02 87.49 3.2H99.84V6.77H91.24V8.66Q92.01 8.68 93.5 8.68Q96.03 8.68 98.73 8.56V11.95Q96.03 11.83 93.5 11.83Q92.01 11.83 91.24 11.85Z"/>
+      <path class="l2" d="M16.47 23.55Q16.34 32.05 16.34 41.75Q16.34 51.5 16.47 60H9.44L4.69 32.55L5.05 60H0Q0.16 50.25 0.16 41.75Q0.16 33.3 0 23.55H7.23L12 51.75L11.66 23.55ZM18.04 41.45Q18.04 32.5 20.16 27.47Q22.27 22.44 26.78 22.44Q31.32 22.44 33.43 27.47Q35.54 32.5 35.54 41.45Q35.54 50.55 33.44 55.53Q31.34 60.5 26.78 60.5Q22.29 60.5 20.17 55.5Q18.04 50.5 18.04 41.45ZM30.89 41.45Q30.89 37.02 29.92 34.86Q28.96 32.7 26.78 32.7Q24.62 32.7 23.66 34.86Q22.7 37.02 22.7 41.45Q22.7 45.92 23.66 48.08Q24.62 50.25 26.78 50.25Q28.96 50.25 29.92 48.11Q30.89 45.97 30.89 41.45ZM53.98 34.06Q50.89 33.81 47.99 33.76V60H43.08V33.76Q40.15 33.81 37.11 34.06V23.5H53.98ZM60.18 50.8Q67.64 50.7 71 50.25Q70.86 52.31 70.83 54.49Q70.8 56.68 70.8 60H55.55Q55.7 50.25 55.7 41.75Q55.7 33.25 55.55 23.5H70.8V32.6H60.18V37.43Q61.12 37.48 62.97 37.48Q66.09 37.48 69.43 37.17V45.82Q66.09 45.52 62.97 45.52Q61.12 45.52 60.18 45.57Z"/>
       <g class="l3">
         <g fill="none" stroke="url(#cvGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
           <path d="M82 44c2.8-3-2.8-5.8 0-8.8s-2.8-5.8 0-8.8"/>
