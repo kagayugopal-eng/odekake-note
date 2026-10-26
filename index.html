@@ -564,6 +564,86 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 .cv-choices{animation:cvFade .9s ease 2.5s both}
 .cv.noIntro .cv-choices{animation-delay:0s}
 @media(prefers-reduced-motion:reduce){.cv-choices{animation:none;opacity:1;transform:none}}
+
+/* ---------- リスト表示 / 地図表示 ---------- */
+.seg{display:flex;background:rgba(0,0,0,.28);border-radius:12px;overflow:hidden;margin:0 0 14px;box-shadow:var(--shadow)}
+.seg button{flex:1;border:0;background:transparent;color:var(--waku-soft);font:inherit;font-weight:700;font-size:14px;padding:13px 0;cursor:pointer}
+.seg button.on{background:var(--wood-ink);color:var(--waku)}
+/* 一覧(横並び) */
+#list{display:flex;flex-direction:column;gap:12px}
+.item{display:flex;gap:12px;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:10px;box-shadow:var(--shadow);cursor:pointer}
+.item:active{transform:scale(.99)}
+.thumb{position:relative;flex:none;width:104px;height:104px;border-radius:10px;overflow:hidden;background:var(--surface-2)}
+.thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.thumb .noimg{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:34px;color:var(--ink-faint)}
+.thumb .pcount{right:5px;top:5px;font-size:10px;padding:1px 7px}
+.info{min-width:0;flex:1}
+.info h3{font-family:"Zen Old Mincho",serif;font-size:16.5px;font-weight:700;margin:0;line-height:1.3;word-break:break-word}
+.info .sub{font-size:12px;color:var(--ink-soft);margin:2px 0 6px}
+.bds{display:flex;flex-wrap:wrap;gap:4px 10px;margin-bottom:6px}
+.bd{display:inline-flex;align-items:center;gap:4px;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.ic{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#8b8f94;color:#fff;font-style:normal;font-size:11px;font-weight:700}
+.ic.sa{background:#d8341c}.ic.mi{background:#1d6fd0}
+.info .line{font-size:12px;color:var(--ink-soft);display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px}
+.info .line .s{font-size:14px;letter-spacing:1px}
+/* 詳細ページ */
+.dtCard{background:var(--surface);border:1px solid var(--rule);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:18px;position:relative}
+.gal{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;background:var(--surface-2)}
+.gal img{flex:none;width:100%;aspect-ratio:16/10;object-fit:cover;scroll-snap-align:center}
+.galn{position:absolute;right:10px;top:10px;background:rgba(20,10,3,.65);color:#fff;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px}
+.dtIn{padding:16px 16px 18px}
+.dtIn h2{font-family:"Zen Old Mincho",serif;font-size:22px;margin:0 0 2px;line-height:1.3;word-break:break-word}
+.dtIn .sub{font-size:12.5px;color:var(--ink-soft)}
+.dtIn .line{margin:8px 0 14px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font-size:12.5px;color:var(--ink-soft)}
+.dtIn .line .s{font-size:20px}
+.temps{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tp{position:relative;overflow:hidden;border-radius:16px;padding:14px 8px 14px;text-align:center;color:#1b1b1b}
+.tp.hot{background:linear-gradient(180deg,#fff4ee,#ffd7c2)}
+.tp.cool{background:linear-gradient(180deg,#f0f8ff,#c9e4fb)}
+.tp>*{position:relative;z-index:1}
+.tp .ico{display:block;margin:0 auto 4px}
+.tp .tl{font-weight:700;font-size:15px}
+.tp.hot .tl{color:#d8341c}.tp.cool .tl{color:#1469d8}
+.tv{display:flex;align-items:baseline;justify-content:center;gap:4px;margin:6px 0 8px;white-space:nowrap}
+.tv small{font-size:11px;font-weight:700}
+.tv b{font-family:"Dela Gothic One",sans-serif;font-weight:400;font-size:clamp(42px,15vw,60px);line-height:1;font-variant-numeric:tabular-nums;display:inline-block}
+.tv em{font-style:normal;font-weight:700;font-size:14px}
+.tp.hot .tv b{color:#e5260d;text-shadow:0 0 14px rgba(255,90,30,.45)}
+.tp.cool .tv b{color:#1469d8;text-shadow:0 0 14px rgba(40,150,255,.4)}
+.tp.done .tv b{animation:tpPop .6s cubic-bezier(.3,1.6,.5,1)}
+.tp.hot.done .tv b{animation:tpPop .6s cubic-bezier(.3,1.6,.5,1),heatGlow 2s ease-in-out .6s infinite}
+.tp.cool.done .tv b{animation:tpPop .6s cubic-bezier(.3,1.6,.5,1),coolGlow 2.6s ease-in-out .6s infinite}
+@keyframes tpPop{0%{transform:scale(1)}45%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes heatGlow{0%,100%{text-shadow:0 0 10px rgba(255,90,30,.35)}50%{text-shadow:0 0 26px rgba(255,90,30,.85),0 0 6px rgba(255,170,90,.8)}}
+@keyframes coolGlow{0%,100%{text-shadow:0 0 8px rgba(40,150,255,.3)}50%{text-shadow:0 0 22px rgba(40,150,255,.8)}}
+.gauge{height:8px;border-radius:4px;background:rgba(0,0,0,.1);overflow:hidden;margin:0 6px 10px}
+.gauge i{display:block;height:100%;width:0;border-radius:4px;transition:width 1.5s cubic-bezier(.2,.8,.2,1)}
+.tp.hot .gauge i{background:linear-gradient(90deg,#ffb259,#ff5a1f,#e5260d)}
+.tp.cool .gauge i{background:linear-gradient(90deg,#8fd8ff,#3a9bff,#1469d8)}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:5px}
+.chips span{font-size:11px;font-weight:700;color:#fff;background:#7b7f85;border-radius:6px;padding:2px 8px}
+.chips span.none{background:rgba(0,0,0,.12);color:#555}
+/* サウナ: 熱でゆらめく */
+.heat span{position:absolute;bottom:-20px;width:34px;height:90px;border-radius:50%;background:linear-gradient(0deg,rgba(255,110,40,.55),rgba(255,160,90,0));filter:blur(9px);animation:heatRise 2.8s ease-in infinite;opacity:0;z-index:0}
+.heat span:nth-child(1){left:6%}.heat span:nth-child(2){left:26%;animation-delay:.7s}.heat span:nth-child(3){left:46%;animation-delay:1.5s}
+.heat span:nth-child(4){left:64%;animation-delay:.3s}.heat span:nth-child(5){left:82%;animation-delay:1.1s}
+@keyframes heatRise{0%{transform:translateY(0) scaleX(.8);opacity:0}25%{opacity:.9}100%{transform:translateY(-150px) scaleX(1.5) skewX(8deg);opacity:0}}
+/* 水風呂: 波紋と泡 */
+.water{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.water .rip{position:absolute;left:50%;top:46%;width:60px;height:60px;margin:-30px 0 0 -30px;border:2px solid rgba(30,120,220,.5);border-radius:50%;opacity:0;animation:ripple 3.4s ease-out infinite}
+.water .rip:nth-child(2){animation-delay:1.1s}.water .rip:nth-child(3){animation-delay:2.2s}
+@keyframes ripple{0%{transform:scale(.2);opacity:.9}100%{transform:scale(3.4);opacity:0}}
+.water .bub{position:absolute;bottom:-12px;width:8px;height:8px;border-radius:50%;border:1.5px solid rgba(255,255,255,.95);background:rgba(255,255,255,.35);animation:bubble 4s ease-in infinite;opacity:0}
+.water .bub:nth-child(4){left:14%}.water .bub:nth-child(5){left:34%;width:6px;height:6px;animation-delay:1.2s}.water .bub:nth-child(6){left:62%;animation-delay:2.1s}.water .bub:nth-child(7){left:82%;width:5px;height:5px;animation-delay:.6s}
+@keyframes bubble{0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(-170px) translateX(8px);opacity:0}}
+.water .wave{position:absolute;left:0;bottom:0;width:200%;height:26px;animation:waveMove 4.5s linear infinite;opacity:.55}
+@keyframes waveMove{to{transform:translateX(-50%)}}
+.delta{margin:12px 0 0;text-align:center;font-weight:700;font-size:13px;color:var(--ink-soft)}
+.delta b{font-family:"Dela Gothic One",sans-serif;font-weight:400;font-size:30px;color:var(--heat);margin:0 2px;font-variant-numeric:tabular-nums}
+.dtMemo{margin:16px 0 0;font-size:14px;line-height:1.7;white-space:pre-wrap;word-break:break-word}
+.dtFoot{margin-top:18px;display:flex;justify-content:flex-end}
+.dtFoot button{background:none;border:none;color:var(--ink-faint);text-decoration:underline;font:inherit;font-size:12px;cursor:pointer}
+@media(prefers-reduced-motion:reduce){.heat span,.water .rip,.water .bub,.water .wave{animation:none;opacity:.3}.tp.done .tv b{animation:none!important}}
 </style></head><body>
 <div id="viewCover" class="cv" role="button" aria-label="タップしてはじめる">
   <div class="cv-glow" aria-hidden="true"></div>
@@ -743,6 +823,9 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
   <div class="headtext"><h1>ODEKAKE<br>NOTE ♨</h1><p>行った場所を、みんなでシェアする場所。</p></div>
 </header>
 <div class="noren" aria-hidden="true"><span></span><span></span></div>
+<button type="button" class="admBar" id="admBar" hidden></button>
+<div class="seg" id="seg"><button type="button" data-tab="list" class="on">リスト表示</button><button type="button" data-tab="map">地図表示</button></div>
+<div id="tabMap" hidden>
   <div class="mapCard">
     <svg class="mapDeco tl" width="26" height="26" viewBox="0 0 24 40" aria-hidden="true">
       <path d="M12 38 L12 20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
@@ -786,10 +869,12 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
     <button type="button" class="linkbtn mapExpandBtn" id="mapExpandBtn">都道府県から選んで見る ›</button>
     <p class="mapCredit">地図: Wikipedia「日本地図」をもとに作成</p>
   </div>
-<button type="button" class="admBar" id="admBar" hidden></button>
+</div>
+<div id="tabList">
 <div id="filterChipWrap"></div>
 <div class="bar"><input id="q" placeholder="さがす(施設名・場所・メンバー・感想)"><button id="menu">バックアップ</button></div>
 <div id="list"></div>
+</div>
 </div>
 <button id="fab" aria-label="追加">＋</button>
 </div>
@@ -822,6 +907,12 @@ input[type=file]{font-size:13px;color:var(--ink-soft);background:var(--surface-2
 <div class="row"><button type="button" class="btn" id="cancel">閉じる</button><button type="button" class="btn d" id="del" hidden>削除</button><button class="btn p">保存</button></div>
 </form></dialog>
 
+<div id="viewDetail" hidden>
+<div class="wrap">
+<div class="bar"><button type="button" class="js-back" hidden>‹ 戻る</button><button type="button" id="dtToCover">表紙</button><button type="button" id="dtEdit">編集</button></div>
+<div class="dtCard" id="dtBody"></div>
+</div>
+</div>
 <div id="viewAdmin" hidden>
 <div class="wrap">
 <header class="cover">
@@ -1099,19 +1190,16 @@ async function render(){
   let a=every.slice().reverse();
   if(activePref)a=a.filter(e=>e.prefecture===activePref);
   if(k)a=a.filter(e=>[e.name,e.prefecture,e.address,e.members,e.memo].join(' ').toLowerCase().includes(k));
+  const city=ad=>{const m=(ad||'').replace(/^.{2,3}[都道府県]/,'').match(/^(.+?[市区町村郡])/);return m?m[1]:''};
+  const tv=v=>(v!==''&&v!=null&&!isNaN(v))?esc(v):'–';
   $('#list').innerHTML=a.length?a.map(e=>{
-    const d=e.date.split('-');
-    const tags=[e.status==='pending'?'<span class="tag" style="background:var(--heat);color:#fff;border-color:transparent">承認待ち</span>':'',...FLAGS.filter(([f])=>e[f]).map(([,l])=>`<span class="tag heat">${l}</span>`),
-      e.saunaTemp?`<span class="tag heat">サウナ ${esc(e.saunaTemp)}℃</span>`:'',
-      e.mizuburoTemp?`<span class="tag cool">水風呂 ${esc(e.mizuburoTemp)}℃</span>`:'',
-      e.prefecture?`<span class="tag">${esc(e.prefecture)}</span>`:''].join('');
-    return `<div class="card" data-id="${e.id}">${e.photos[0]?`<img src="${e.photos[0]}" alt="">`:''}${e.photos.length>1?`<span class="pcount">${e.photos.length}枚</span>`:''}
-<div class="inner"><div class="badge"><small>${d[0]}</small><b>${no.get(e.id)}</b><i style="left:23%"></i><i style="left:50%"></i><i style="left:77%"></i></div>
-<div class="body"><div class="top"><h3>${esc(e.name)}</h3><time>${esc(e.date)}</time></div>
-<div style="margin-top:4px">${star(e.rating)}<span class="rv">${e.rating||''}</span></div>
-${e.address||e.members?`<div class="meta">${esc(e.address)}${e.address&&e.members?' ・ ':''}${esc(e.members)}</div>`:''}
-${tags?`<div class="tags">${tags}</div>`:''}${e.memo?`<p class="note">${esc(e.memo)}</p>`:''}</div></div></div>`}).join(''):`<p class="empty">${activePref?esc(activePref)+'の記録はまだありません。':'まだ記録がありません。<br>右下の＋から書き始めましょう。'}</p>`;
-  renderChip();renderMap();renderMapPage();coverStats();updateAdm();
+    const pend=e.status==='pending'?'<span class="tag" style="background:var(--heat);color:#fff;border-color:transparent;margin-right:6px">承認待ち</span>':'';
+    const sub=[e.prefecture,city(e.address)].filter(Boolean).join(' ');
+    return `<div class="item" data-id="${esc(e.id)}"><div class="thumb">${e.photos[0]?`<img src="${e.photos[0]}" alt="" loading="lazy">`:'<div class="noimg">♨</div>'}${e.photos.length>1?`<span class="pcount">${e.photos.length}枚</span>`:''}</div>
+<div class="info"><h3>${pend}${esc(e.name)}</h3><div class="sub">${esc(sub)||'&nbsp;'}</div>
+<div class="bds"><span class="bd"><i class="ic sa">サ</i>${tv(e.saunaTemp)}</span><span class="bd"><i class="ic mi">水</i>${tv(e.mizuburoTemp)}</span><span class="bd"><i class="ic">外</i>${e.sotogaiyoku?'○':'–'}</span><span class="bd"><i class="ic">ロ</i>${(e.loyly||e.selfLoyly)?'○':'–'}</span></div>
+<div class="line">${star(e.rating)}<span>${e.rating||''}</span><time>${esc(e.date)}</time>${e.members?`<span>${esc(e.members)}</span>`:''}</div></div></div>`}).join(''):`<p class="empty">${activePref?esc(activePref)+'の記録はまだありません。':'まだ記録がありません。<br>右下の＋から書き始めましょう。'}</p>`;
+  renderChip();renderMap();renderMapPage();coverStats();updateAdm();refreshDetail();
 }
 function facilityEntries(pref){
   const by={};
@@ -1132,7 +1220,7 @@ function renderMap(){
   $('#mapWrap').innerHTML='<svg viewBox="-8 -12 1017 1205" role="img" aria-label="ODEKAKE MAP">'+ISLANDS_SVG+placed.map((p,i)=>mapPinSvg(p,i,p.prefecture===activePref)).join('')+'</svg>';
   $('#mapWrap').querySelectorAll('.pin').forEach(g=>{
     const n=g.getAttribute('data-pref');
-    onAct(g,()=>{activePref=activePref===n?null:n;render()});
+    onAct(g,()=>{activePref=activePref===n?null:n;setTab('list');render()});
   });
 }
 function renderChip(){
@@ -1149,14 +1237,15 @@ function renderMapPage(){
   const vb=mapSel?computeViewBoxForPlaced(placed,40):'-8 -12 1017 1205';
   $('#mapPageEmpty').hidden=placed.length>0;
   $('#mapPageWrap').innerHTML=placed.length?'<svg viewBox="'+vb+'" role="img" aria-label="ODEKAKE MAP">'+ISLANDS_SVG+placed.map((p,i)=>mapPinSvg(p,i,false)).join('')+'</svg>':'';
-  $('#mapPageWrap').querySelectorAll('.pin').forEach((g,i)=>onAct(g,()=>{const e=cache.find(x=>x.id===placed[i].lastId);if(e)open(e)}));
+  $('#mapPageWrap').querySelectorAll('.pin').forEach((g,i)=>onAct(g,()=>{const e=cache.find(x=>x.id===placed[i].lastId);if(e)showDetail(e.id)}));
 }
 let curView='cover',histOK=true;const viewStack=[];
 function applyView(v){
-  $('#viewMap').hidden=v!=='map';$('#viewHome').hidden=v!=='home';$('#viewAdmin').hidden=v!=='admin';
+  $('#viewMap').hidden=v!=='map';$('#viewHome').hidden=v!=='home';$('#viewAdmin').hidden=v!=='admin';$('#viewDetail').hidden=v!=='detail';
   if(v==='cover'){if(window.openCoverUI)window.openCoverUI()}
   else{const c=$('#viewCover');if(c)c.hidden=true}
   if(v==='admin')renderAdmin();
+  if(v==='detail')renderDetail(true);
   document.querySelectorAll('.js-back').forEach(b=>b.hidden=!viewStack.length);
   scrollTo(0,0);
 }
@@ -1178,10 +1267,86 @@ function goBack(){
   if(histOK)history.back();else popView();
 }
 addEventListener('popstate',popView);
+
+// ---- リスト表示 / 地図表示 ----
+function setTab(t){
+  $('#tabList').hidden=t!=='list';$('#tabMap').hidden=t!=='map';
+  document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
+}
+$('#seg').onclick=e=>{const b=e.target.closest('button');if(b)setTab(b.dataset.tab)};
+// ---- 投稿の詳細ページ(温度が動く) ----
+let detailId=null,dtSig='';
+const sigOf=e=>JSON.stringify({...e,photos:(e.photos||[]).length});
+const hasT=v=>v!==''&&v!=null&&!isNaN(v);
+function showDetail(id){detailId=id;showView('detail')}
+function countTo(el,from,to,ms,done){
+  const dec=(String(to).split('.')[1]||'').length;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=(+to).toFixed(dec);done&&done();return}
+  const t0=performance.now();
+  (function f(now){
+    const k=Math.min(1,(now-t0)/ms),e=1-Math.pow(1-k,3);
+    el.textContent=(from+(to-from)*e).toFixed(dec);
+    if(k<1)requestAnimationFrame(f);else done&&done();
+  })(t0);
+}
+function dtHtml(e){
+  const st=hasT(e.saunaTemp)?+e.saunaTemp:null,mt=hasT(e.mizuburoTemp)?+e.mizuburoTemp:null;
+  const n=(e.photos||[]).length;
+  const gal=n?`<div class="gal" id="gal">${e.photos.map(p=>`<img src="${p}" alt="">`).join('')}</div>${n>1?`<span class="galn" id="galn">1 / ${n}</span>`:''}`:'';
+  const hotChips=[['loyly','ロウリュ'],['selfLoyly','セルフロウリュ'],['neppa','熱波']].filter(([k])=>e[k]).map(([,l])=>`<span>${l}</span>`).join('')||'<span class="none">設備の記録なし</span>';
+  const coolChips=e.sotogaiyoku?'<span>外気浴</span>':'<span class="none">外気浴なし</span>';
+  const sauIco='<svg class="ico" width="46" height="46" viewBox="0 0 48 48" fill="none" stroke="#d8341c" stroke-width="2.6" stroke-linejoin="round"><rect x="5" y="9" width="38" height="30"/><path d="M5 17h38M5 25h38"/><rect x="29" y="25" width="10" height="14"/><circle cx="34" cy="32" r="1.3" fill="#d8341c"/></svg>';
+  const miIco='<svg class="ico" width="46" height="46" viewBox="0 0 48 48" fill="none" stroke="#1469d8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><rect x="5" y="9" width="38" height="30"/><path d="M11 21q3.5-3.5 7 0t7 0 7 0M11 30q3.5-3.5 7 0t7 0 7 0"/></svg>';
+  const wave='<svg class="wave" viewBox="0 0 400 26" preserveAspectRatio="none"><path d="M0 13q25-14 50 0t50 0 50 0 50 0 50 0 50 0 50 0 50 0V26H0z" fill="#8fc8f5"/></svg>';
+  const hot=`<div class="tp hot"><div class="heat" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>${sauIco}<div class="tl">サウナ室</div>
+<div class="tv"><small>温度</small>${st!=null?`<b data-to="${st}" data-from="${Math.min(30,st)}">${st}</b>`:'<b>–</b>'}<em>度</em></div>
+${st!=null?`<div class="gauge"><i data-w="${Math.max(4,Math.min(100,st/120*100))}"></i></div>`:''}<div class="chips">${hotChips}</div></div>`;
+  const cool=`<div class="tp cool"><div class="water" aria-hidden="true"><i class="rip"></i><i class="rip"></i><i class="rip"></i><i class="bub"></i><i class="bub"></i><i class="bub"></i><i class="bub"></i>${wave}</div>${miIco}<div class="tl">水風呂</div>
+<div class="tv"><small>温度</small>${mt!=null?`<b data-to="${mt}" data-from="${mt<30?30:Math.max(0,mt-15)}">${mt}</b>`:'<b>–</b>'}<em>度</em></div>
+${mt!=null?`<div class="gauge"><i data-w="${Math.max(4,Math.min(100,mt/40*100))}"></i></div>`:''}<div class="chips">${coolChips}</div></div>`;
+  const delta=(st!=null&&mt!=null&&st>mt)?`<div class="delta">温度差 <b data-to="${Math.round((st-mt)*10)/10}" data-from="0">${Math.round((st-mt)*10)/10}</b>℃ ── この落差が、ととのいをつくる。</div>`:'';
+  const sub=[e.prefecture,e.address].filter(Boolean).join(' ');
+  return `${gal}<div class="dtIn"><h2>${e.status==='pending'?'<span class="tag" style="background:var(--heat);color:#fff;border-color:transparent;margin-right:6px;font-size:11px">承認待ち</span>':''}${esc(e.name)}</h2>
+<div class="sub">${esc(sub)}</div>
+<div class="line">${star(e.rating)}<span>${e.rating||''}</span><time>${esc(e.date)}</time>${e.members?`<span>${esc(e.members)}</span>`:''}</div>
+<div class="temps">${hot}${cool}</div>${delta}
+${e.memo?`<p class="dtMemo">${esc(e.memo)}</p>`:''}
+<div class="dtFoot"><button type="button" data-act="del">この投稿を削除</button></div></div>`;
+}
+function renderDetail(animate){
+  const e=rawCache.find(x=>x.id===detailId);
+  if(!e){dtSig='';$('#dtBody').innerHTML='<p class="admEmpty" style="margin:20px">この投稿は見つかりませんでした。</p>';$('#dtEdit').hidden=true;return}
+  $('#dtEdit').hidden=false;dtSig=sigOf(e);
+  $('#dtBody').innerHTML=dtHtml(e);
+  const gal=$('#gal'),gn=$('#galn');
+  if(gal&&gn)gal.addEventListener('scroll',()=>{gn.textContent=(Math.round(gal.scrollLeft/gal.clientWidth)+1)+' / '+e.photos.length});
+  // 数字がカウントして動き、ゲージが伸びる
+  document.querySelectorAll('#dtBody [data-to]').forEach(b=>{
+    const to=+b.dataset.to,from=+b.dataset.from,host=b.closest('.tp,.delta');
+    if(!animate){host&&host.classList.add('done');return}
+    b.textContent=from.toFixed((String(to).split('.')[1]||'').length);
+    countTo(b,from,to,host&&host.classList.contains('delta')?1900:1500,()=>host&&host.classList.add('done'));
+  });
+  requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll('#dtBody .gauge i').forEach(i=>{i.style.width=i.dataset.w+'%'})));
+  if(!animate)document.querySelectorAll('#dtBody .gauge i').forEach(i=>{i.style.transition='none'});
+}
+function refreshDetail(){
+  if(curView!=='detail')return;
+  const e=rawCache.find(x=>x.id===detailId);
+  if(!e){goBack();return}
+  if(sigOf(e)!==dtSig)renderDetail(false);
+}
+$('#dtEdit').onclick=()=>{const e=rawCache.find(x=>x.id===detailId);if(e)open(e)};
+$('#dtToCover').onclick=()=>window.openCover();
+$('#dtBody').onclick=async ev=>{
+  const b=ev.target.closest('[data-act=del]');if(!b)return;
+  if(confirm('この投稿を削除しますか?')){const id=detailId;await rm(id);await render();goBack()}
+};
+
 $('#mapExpandBtn').onclick=()=>{mapSel=null;renderMapPage();showView('map')};
 $('#mapPageBack').onclick=()=>showView('home');
 $('#q').oninput=render;
-$('#list').onclick=async e=>{const c=e.target.closest('.card');if(!c)return;open((await all()).find(x=>x.id===c.dataset.id))};
+$('#list').onclick=e=>{const c=e.target.closest('.item');if(c)showDetail(c.dataset.id)};
 
 function drawRate(){
   $('#rate').innerHTML=star(rating)+`<span id="rv">${rating||'未評価'}</span>`;
