@@ -724,7 +724,79 @@ html.locked body>*:not(#gate):not(script){display:none!important}
 .gt-pad button:active{background:#e8743b;border-color:#e8743b;color:#1a0b04}
 .gt-rem{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:22px;font-size:12px;color:#8fa3b0;font-weight:700}
 .gt-rem input{width:auto;accent-color:#e8743b}
+/* ---------- サウナの壁・木札・ヴィヒタ ---------- */
+.vh{display:block;height:auto;overflow:visible}
+.hang{position:absolute;top:2px;z-index:4;transform-origin:50% 0;animation:vhSway 5s ease-in-out infinite;filter:drop-shadow(2px 7px 5px rgba(0,0,0,.55));pointer-events:none}
+.hangR{right:10px;width:56px}
+.hangL{left:8px;width:42px;animation-duration:6.4s;animation-delay:-2.6s}
+@keyframes vhSway{0%,100%{transform:rotate(-2.6deg)}50%{transform:rotate(3deg)}}
+.saunaWall{position:relative;border-radius:16px;padding:34px 12px 8px;overflow:hidden;border:2px solid #2b1a0d;
+  background:
+   radial-gradient(ellipse 15px 26px at 21% 33%,rgba(58,30,10,.6),rgba(58,30,10,0) 72%),
+   radial-gradient(ellipse 12px 22px at 79% 58%,rgba(58,30,10,.55),rgba(58,30,10,0) 72%),
+   radial-gradient(ellipse 10px 18px at 47% 84%,rgba(58,30,10,.5),rgba(58,30,10,0) 72%),
+   repeating-linear-gradient(90deg,rgba(24,11,3,.6) 0 2px,rgba(255,205,140,.1) 2px 4px,transparent 4px 74px),
+   repeating-linear-gradient(90deg,transparent 0 37px,rgba(24,11,3,.28) 37px 38px,transparent 38px 113px),
+   repeating-linear-gradient(90deg,rgba(90,50,20,.2) 0 1px,transparent 1px 5px,rgba(255,212,150,.08) 5px 6px,transparent 6px 11px),
+   linear-gradient(180deg,#b7804a,#a8723b 45%,#8e5c2d);
+  box-shadow:inset 0 0 44px rgba(30,14,4,.6),inset 0 3px 0 rgba(255,220,170,.22),0 12px 24px -12px rgba(0,0,0,.75)}
+.saunaWall::before{content:"";position:absolute;left:0;right:0;top:0;height:22px;z-index:1;
+  background:repeating-linear-gradient(90deg,rgba(255,200,140,.12) 0 1px,transparent 1px 9px),linear-gradient(180deg,#74482a,#4b2d16);
+  border-bottom:2px solid #24150a;box-shadow:0 5px 9px rgba(0,0,0,.5)}
+.wbar{position:relative;z-index:2;margin:0 56px 14px 48px}
+.saunaWall #filterChipWrap{position:relative;z-index:2}
+.saunaWall .empty{position:relative;z-index:2;color:#f6e7c6}
+#list{position:relative;z-index:2}
+.wallFoot{position:relative;z-index:2;text-align:center;padding:14px 0 16px}
+/* 木札: 釘でとめた板 */
+.item{--surface:#f7e8c8;--surface-2:#eadab4;--ink:#2a2118;--ink-soft:#6f5a3f;--ink-faint:#9b8460;--rule:#d3bd8c;color:var(--ink);
+  background:repeating-linear-gradient(90deg,rgba(120,80,30,.09) 0 1px,transparent 1px 7px),linear-gradient(180deg,#f8eacb,#ebd6a8);
+  border:1px solid #a98650;transform-origin:50% 0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75),0 9px 14px -6px rgba(0,0,0,.7)}
+.item::before,.item::after{content:"";position:absolute;top:5px;width:7px;height:7px;border-radius:50%;z-index:2;
+  background:radial-gradient(circle at 35% 30%,#e4e4e4,#5a5a5a 60%,#222);box-shadow:0 1px 1px rgba(0,0,0,.55)}
+.item::before{left:5px}.item::after{right:5px}
+.dtCard{--surface:#f7e8c8;--surface-2:#eadab4;--ink:#2a2118;--ink-soft:#6f5a3f;--ink-faint:#9b8460;--rule:#d3bd8c;color:var(--ink);
+  background:repeating-linear-gradient(90deg,rgba(120,80,30,.09) 0 1px,transparent 1px 7px),linear-gradient(180deg,#f8eacb,#ebd6a8);border-color:#a98650}
+.dtWrap{position:relative}
+.dtHang{top:-6px;right:6px;width:62px;z-index:7}
+/* 演出: ヴィヒタが壁をひとなで → 木札が順にぶら下がる → 葉がはらはら */
+.whisk{position:absolute;top:-8px;left:0;width:108px;z-index:6;opacity:0;pointer-events:none;transform-origin:50% 0;filter:drop-shadow(5px 12px 9px rgba(0,0,0,.55))}
+.saunaWall.intro .whisk{animation:whisk 1.6s cubic-bezier(.5,.05,.4,1) .05s forwards}
+@keyframes whisk{
+ 0%{opacity:0;transform:translateX(-96px) rotate(-64deg)}
+ 10%{opacity:1}
+ 46%{transform:translateX(calc(var(--ww,300px)*.4)) rotate(28deg)}
+ 74%{opacity:1;transform:translateX(calc(var(--ww,300px)*.72)) rotate(-26deg)}
+ 100%{opacity:0;transform:translateX(calc(var(--ww,300px) + 40px)) rotate(36deg)}}
+.saunaWall.intro .item{animation:plaqueIn .75s cubic-bezier(.2,1.25,.35,1) both;animation-delay:calc(var(--i,0)*120ms + 420ms)}
+@keyframes plaqueIn{
+ 0%{opacity:0;transform:translateY(-30px) rotate(-6deg) scale(.96);filter:brightness(1.7)}
+ 55%{opacity:1;transform:translateY(5px) rotate(1.8deg);filter:brightness(1.15)}
+ 100%{opacity:1;transform:none;filter:none}}
+.leaves{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:5}
+.lf{position:absolute;top:-34px;opacity:0;animation:leafFall var(--d,2s) ease-in var(--dl,0s) forwards}
+@keyframes leafFall{
+ 0%{opacity:0;transform:translate(0,0) rotate(var(--r0,0deg))}
+ 12%{opacity:1}
+ 50%{transform:translate(calc(var(--dx,30px)*-.6),calc(var(--h,420px)*.5)) rotate(calc(var(--r1,200deg)*.5))}
+ 100%{opacity:.9;transform:translate(var(--dx,30px),var(--h,420px)) rotate(var(--r1,200deg))}}
+@media(prefers-reduced-motion:reduce){.hang{animation:none}.saunaWall.intro .item{animation:none}.saunaWall.intro .whisk{animation:none}}
 </style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="vg1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#2e6a22"/><stop offset="1" stop-color="#5fa23a"/></linearGradient>
+<linearGradient id="vg2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#3a7a2a"/><stop offset="1" stop-color="#7cbb4a"/></linearGradient>
+<linearGradient id="vg3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#27591d"/><stop offset="1" stop-color="#4c8f33"/></linearGradient>
+<linearGradient id="vg4" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#5c9a35"/><stop offset="1" stop-color="#a9d36b"/></linearGradient>
+<linearGradient id="vgs" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a5a34"/><stop offset=".5" stop-color="#b08a58"/><stop offset="1" stop-color="#6b4a28"/></linearGradient>
+<g id="lfA"><path d="M0 0 L5.4 -1.9 L6.4 -3.7 L9.5 -5.6 L9.2 -7.4 L10.9 -9.3 L9.7 -11.1 L10.3 -13.0 L8.4 -14.9 L8.2 -16.7 L5.9 -18.6 L5.3 -20.4 L2.9 -22.3 L2.1 -24.1 L-0.1 -26.0 L-2.1 -24.1 L-2.9 -22.3 L-5.3 -20.4 L-5.9 -18.6 L-8.2 -16.7 L-8.4 -14.9 L-10.3 -13.0 L-9.7 -11.1 L-10.9 -9.3 L-9.2 -7.4 L-9.5 -5.6 L-6.4 -3.7 L-5.4 -1.9Z" fill="url(#vg1)"/><path d="M0 1V-25.0 M0 -4.3 L5.9 -7.2 M0 -4.3 L-5.9 -7.2 M0 -8.7 L7.9 -11.5 M0 -8.7 L-7.9 -11.5 M0 -13.0 L7.6 -15.9 M0 -13.0 L-7.6 -15.9 M0 -17.3 L5.7 -20.2 M0 -17.3 L-5.7 -20.2 M0 -21.7 L2.9 -24.5 M0 -21.7 L-2.9 -24.5" stroke="#1f4a17" stroke-opacity=".55" stroke-width=".7" fill="none"/></g>
+<g id="lfB"><path d="M0 0 L5.0 -1.8 L6.1 -3.7 L8.7 -5.5 L8.3 -7.3 L9.4 -9.2 L8.0 -11.0 L7.9 -12.8 L5.9 -14.7 L5.2 -16.5 L3.0 -18.3 L2.0 -20.2 L-0.1 -22.0 L-2.0 -20.2 L-3.0 -18.3 L-5.2 -16.5 L-5.9 -14.7 L-7.9 -12.8 L-8.0 -11.0 L-9.4 -9.2 L-8.3 -7.3 L-8.7 -5.5 L-6.1 -3.7 L-5.0 -1.8Z" fill="url(#vg2)"/><path d="M0 1V-21.1 M0 -3.7 L5.1 -6.1 M0 -3.7 L-5.1 -6.1 M0 -7.3 L6.8 -9.8 M0 -7.3 L-6.8 -9.8 M0 -11.0 L6.5 -13.4 M0 -11.0 L-6.5 -13.4 M0 -14.7 L4.9 -17.1 M0 -14.7 L-4.9 -17.1 M0 -18.3 L2.5 -20.8 M0 -18.3 L-2.5 -20.8" stroke="#2a5a1f" stroke-opacity=".5" stroke-width=".7" fill="none"/></g>
+<g id="lfD"><path d="M0 0 L5.0 -1.8 L6.1 -3.7 L8.7 -5.5 L8.3 -7.3 L9.4 -9.2 L8.0 -11.0 L7.9 -12.8 L5.9 -14.7 L5.2 -16.5 L3.0 -18.3 L2.0 -20.2 L-0.1 -22.0 L-2.0 -20.2 L-3.0 -18.3 L-5.2 -16.5 L-5.9 -14.7 L-7.9 -12.8 L-8.0 -11.0 L-9.4 -9.2 L-8.3 -7.3 L-8.7 -5.5 L-6.1 -3.7 L-5.0 -1.8Z" fill="url(#vg4)"/><path d="M0 1V-21.1 M0 -3.7 L5.1 -6.1 M0 -3.7 L-5.1 -6.1 M0 -7.3 L6.8 -9.8 M0 -7.3 L-6.8 -9.8 M0 -11.0 L6.5 -13.4 M0 -11.0 L-6.5 -13.4 M0 -14.7 L4.9 -17.1 M0 -14.7 L-4.9 -17.1 M0 -18.3 L2.5 -20.8 M0 -18.3 L-2.5 -20.8" stroke="#3a6a24" stroke-opacity=".45" stroke-width=".7" fill="none"/></g>
+<g id="lfC"><path d="M0 0 L5.4 -1.9 L6.4 -3.8 L9.8 -5.6 L9.6 -7.5 L11.7 -9.4 L10.6 -11.2 L11.8 -13.1 L10.1 -15.0 L10.4 -16.9 L8.3 -18.8 L8.0 -20.6 L5.7 -22.5 L5.1 -24.4 L2.8 -26.2 L2.0 -28.1 L-0.2 -30.0 L-2.0 -28.1 L-2.8 -26.2 L-5.1 -24.4 L-5.7 -22.5 L-8.0 -20.6 L-8.3 -18.8 L-10.4 -16.9 L-10.1 -15.0 L-11.8 -13.1 L-10.6 -11.2 L-11.7 -9.4 L-9.6 -7.5 L-9.8 -5.6 L-6.4 -3.8 L-5.4 -1.9Z" fill="url(#vg3)"/><path d="M0 1V-28.8 M0 -4.3 L5.9 -7.6 M0 -4.3 L-5.9 -7.6 M0 -8.6 L8.3 -11.9 M0 -8.6 L-8.3 -11.9 M0 -12.9 L8.7 -16.2 M0 -12.9 L-8.7 -16.2 M0 -17.1 L7.5 -20.4 M0 -17.1 L-7.5 -20.4 M0 -21.4 L5.4 -24.7 M0 -21.4 L-5.4 -24.7 M0 -25.7 L2.7 -29.0 M0 -25.7 L-2.7 -29.0" stroke="#163a10" stroke-opacity=".6" stroke-width=".75" fill="none"/></g><symbol id="vihta" viewBox="-60 -14 240 350"><path d="M52.3 58 Q13.5 140.8 -30.4 223.6" stroke="#6a4a2a" stroke-width="2.1" fill="none" stroke-linecap="round"/><path d="M53.4 58 Q5.6 152.3 -37.8 246.7" stroke="#6a4a2a" stroke-width="2.0" fill="none" stroke-linecap="round"/><path d="M54.5 58 Q2.4 156.3 -34.1 254.6" stroke="#6a4a2a" stroke-width="2.3" fill="none" stroke-linecap="round"/><path d="M55.6 58 Q16.7 151.5 -8.4 245.0" stroke="#6a4a2a" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M56.7 58 Q21.1 172.3 -1.9 286.7" stroke="#6a4a2a" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M57.8 58 Q54.1 170.8 35.3 283.6" stroke="#6a4a2a" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M58.9 58 Q66.7 168.3 58.6 278.6" stroke="#6a4a2a" stroke-width="1.7" fill="none" stroke-linecap="round"/><path d="M60.0 58 Q49.6 181.9 46.3 305.8" stroke="#6a4a2a" stroke-width="1.9" fill="none" stroke-linecap="round"/><path d="M61.1 58 Q59.6 161.5 64.5 265.1" stroke="#6a4a2a" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M62.2 58 Q80.8 160.1 96.7 262.2" stroke="#6a4a2a" stroke-width="1.7" fill="none" stroke-linecap="round"/><path d="M63.3 58 Q87.1 161.7 109.2 265.4" stroke="#6a4a2a" stroke-width="2.0" fill="none" stroke-linecap="round"/><path d="M64.4 58 Q78.3 152.1 102.0 246.2" stroke="#6a4a2a" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M65.5 58 Q95.2 155.2 131.1 252.5" stroke="#6a4a2a" stroke-width="2.1" fill="none" stroke-linecap="round"/><path d="M66.6 58 Q101.1 151.7 142.4 245.3" stroke="#6a4a2a" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M67.7 58 Q109.7 151.1 160.2 244.1" stroke="#6a4a2a" stroke-width="2.1" fill="none" stroke-linecap="round"/><use href="#lfD" transform="translate(28.5 107.7) rotate(81) scale(0.75)"/><use href="#lfC" transform="translate(93.7 113.8) rotate(368) scale(0.84)"/><use href="#lfC" transform="translate(33.5 114.1) rotate(-49) scale(0.73)"/><use href="#lfB" transform="translate(87.9 114.2) rotate(297) scale(0.73)"/><use href="#lfB" transform="translate(73.6 114.5) rotate(321) scale(0.74)"/><use href="#lfB" transform="translate(25.1 114.6) rotate(-19) scale(0.68)"/><use href="#lfD" transform="translate(83.9 116.3) rotate(393) scale(0.58)"/><use href="#lfA" transform="translate(24.7 117.0) rotate(74) scale(0.66)"/><use href="#lfB" transform="translate(73.1 119.2) rotate(317) scale(0.56)"/><use href="#lfA" transform="translate(60.8 120.1) rotate(411) scale(0.58)"/><use href="#lfC" transform="translate(77.4 120.2) rotate(393) scale(0.65)"/><use href="#lfC" transform="translate(62.2 124.2) rotate(394) scale(0.74)"/><use href="#lfA" transform="translate(54.2 125.7) rotate(-53) scale(0.83)"/><use href="#lfB" transform="translate(19.6 125.9) rotate(74) scale(0.73)"/><use href="#lfA" transform="translate(36.5 126.6) rotate(62) scale(0.77)"/><use href="#lfA" transform="translate(102.4 131.9) rotate(366) scale(0.81)"/><use href="#lfC" transform="translate(54.4 132.3) rotate(-43) scale(0.81)"/><use href="#lfB" transform="translate(95.4 133.1) rotate(280) scale(0.79)"/><use href="#lfA" transform="translate(90.0 135.0) rotate(378) scale(0.83)"/><use href="#lfD" transform="translate(14.5 136.2) rotate(-19) scale(1.00)"/><use href="#lfB" transform="translate(25.2 136.9) rotate(-8) scale(1.04)"/><use href="#lfA" transform="translate(81.9 137.2) rotate(373) scale(0.88)"/><use href="#lfA" transform="translate(14.9 137.5) rotate(61) scale(0.88)"/><use href="#lfA" transform="translate(78.1 138.7) rotate(300) scale(0.85)"/><use href="#lfA" transform="translate(60.9 141.5) rotate(413) scale(0.92)"/><use href="#lfD" transform="translate(82.4 142.4) rotate(390) scale(0.76)"/><use href="#lfB" transform="translate(62.7 142.7) rotate(344) scale(0.79)"/><use href="#lfD" transform="translate(10.6 143.9) rotate(70) scale(0.95)"/><use href="#lfC" transform="translate(10.6 143.9) rotate(-30) scale(0.80)"/><use href="#lfB" transform="translate(77.5 144.5) rotate(325) scale(0.95)"/><use href="#lfA" transform="translate(52.6 146.7) rotate(-26) scale(0.61)"/><use href="#lfA" transform="translate(62.3 147.6) rotate(325) scale(0.76)"/><use href="#lfD" transform="translate(64.4 149.4) rotate(361) scale(0.67)"/><use href="#lfD" transform="translate(22.3 149.5) rotate(18) scale(0.73)"/><use href="#lfB" transform="translate(62.6 149.8) rotate(412) scale(1.04)"/><use href="#lfC" transform="translate(63.9 150.1) rotate(313) scale(0.77)"/><use href="#lfA" transform="translate(66.4 150.4) rotate(404) scale(0.79)"/><use href="#lfC" transform="translate(84.2 150.5) rotate(369) scale(0.66)"/><use href="#lfB" transform="translate(29.7 151.2) rotate(64) scale(0.88)"/><use href="#lfD" transform="translate(85.4 153.2) rotate(365) scale(0.76)"/><use href="#lfB" transform="translate(113.4 154.2) rotate(393) scale(0.74)"/><use href="#lfB" transform="translate(113.4 154.2) rotate(297) scale(0.83)"/><use href="#lfA" transform="translate(19.0 154.9) rotate(58) scale(0.98)"/><use href="#lfA" transform="translate(19.0 154.9) rotate(-20) scale(0.85)"/><use href="#lfB" transform="translate(96.9 155.7) rotate(388) scale(0.86)"/><use href="#lfB" transform="translate(96.9 155.7) rotate(296) scale(1.03)"/><use href="#lfB" transform="translate(81.6 156.3) rotate(394) scale(0.77)"/><use href="#lfB" transform="translate(81.6 156.3) rotate(315) scale(0.70)"/><use href="#lfB" transform="translate(31.9 156.7) rotate(38) scale(0.70)"/><use href="#lfA" transform="translate(104.9 156.9) rotate(380) scale(0.91)"/><use href="#lfC" transform="translate(104.9 156.9) rotate(305) scale(0.87)"/><use href="#lfC" transform="translate(53.2 158.0) rotate(55) scale(0.87)"/><use href="#lfD" transform="translate(3.9 158.1) rotate(78) scale(1.00)"/><use href="#lfC" transform="translate(3.9 158.1) rotate(-17) scale(0.74)"/><use href="#lfA" transform="translate(4.7 160.0) rotate(83) scale(0.77)"/><use href="#lfD" transform="translate(4.7 160.0) rotate(-28) scale(0.78)"/><use href="#lfA" transform="translate(61.2 160.3) rotate(385) scale(0.94)"/><use href="#lfD" transform="translate(22.7 161.0) rotate(16) scale(0.67)"/><use href="#lfC" transform="translate(84.0 161.0) rotate(391) scale(0.93)"/><use href="#lfA" transform="translate(86.7 161.8) rotate(380) scale(0.90)"/><use href="#lfD" transform="translate(86.7 161.8) rotate(293) scale(0.84)"/><use href="#lfD" transform="translate(52.5 162.2) rotate(-49) scale(0.80)"/><use href="#lfD" transform="translate(0.2 164.7) rotate(74) scale(0.82)"/><use href="#lfA" transform="translate(0.2 164.7) rotate(-12) scale(0.97)"/><use href="#lfA" transform="translate(81.0 164.9) rotate(379) scale(1.00)"/><use href="#lfA" transform="translate(81.0 164.9) rotate(309) scale(0.80)"/><use href="#lfD" transform="translate(11.1 171.8) rotate(27) scale(0.78)"/><use href="#lfD" transform="translate(122.6 172.4) rotate(365) scale(0.75)"/><use href="#lfA" transform="translate(122.6 172.4) rotate(292) scale(0.79)"/><use href="#lfC" transform="translate(50.0 174.4) rotate(66) scale(1.03)"/><use href="#lfB" transform="translate(50.0 174.4) rotate(-21) scale(0.90)"/><use href="#lfB" transform="translate(103.4 174.7) rotate(392) scale(0.86)"/><use href="#lfB" transform="translate(103.4 174.7) rotate(288) scale(0.83)"/><use href="#lfB" transform="translate(-4.5 175.6) rotate(51) scale(0.76)"/><use href="#lfD" transform="translate(-4.5 175.6) rotate(-29) scale(0.90)"/><use href="#lfA" transform="translate(62.7 175.7) rotate(59) scale(0.99)"/><use href="#lfA" transform="translate(62.7 175.7) rotate(-44) scale(0.72)"/><use href="#lfD" transform="translate(23.3 176.0) rotate(60) scale(1.03)"/><use href="#lfD" transform="translate(23.3 176.0) rotate(-36) scale(0.79)"/><use href="#lfA" transform="translate(11.4 177.9) rotate(49) scale(0.80)"/><use href="#lfA" transform="translate(11.4 177.9) rotate(-39) scale(0.89)"/><use href="#lfD" transform="translate(46.4 180.1) rotate(-62) scale(0.82)"/><use href="#lfD" transform="translate(61.8 180.2) rotate(23) scale(0.81)"/><use href="#lfA" transform="translate(86.7 180.8) rotate(382) scale(0.99)"/><use href="#lfC" transform="translate(86.7 180.8) rotate(299) scale(0.79)"/><use href="#lfC" transform="translate(114.8 180.9) rotate(375) scale(0.85)"/><use href="#lfB" transform="translate(114.8 180.9) rotate(305) scale(0.70)"/><use href="#lfC" transform="translate(-4.8 181.5) rotate(84) scale(0.98)"/><use href="#lfC" transform="translate(-4.8 181.5) rotate(-10) scale(1.03)"/><use href="#lfD" transform="translate(91.2 182.3) rotate(389) scale(0.87)"/><use href="#lfA" transform="translate(91.2 182.3) rotate(281) scale(0.88)"/><use href="#lfC" transform="translate(61.7 184.5) rotate(397) scale(0.86)"/><use href="#lfB" transform="translate(61.7 184.5) rotate(312) scale(0.89)"/><use href="#lfA" transform="translate(-10.0 184.5) rotate(75) scale(0.87)"/><use href="#lfC" transform="translate(-10.0 184.5) rotate(-15) scale(1.01)"/><use href="#lfA" transform="translate(84.4 185.6) rotate(383) scale(0.92)"/><use href="#lfA" transform="translate(84.4 185.6) rotate(310) scale(0.88)"/><use href="#lfD" transform="translate(85.3 189.0) rotate(330) scale(0.72)"/><use href="#lfC" transform="translate(50.9 190.9) rotate(38) scale(1.01)"/><use href="#lfD" transform="translate(50.9 190.9) rotate(-45) scale(0.75)"/><use href="#lfA" transform="translate(133.1 193.0) rotate(373) scale(0.93)"/><use href="#lfC" transform="translate(133.1 193.0) rotate(301) scale(0.99)"/><use href="#lfD" transform="translate(-12.9 193.3) rotate(58) scale(1.01)"/><use href="#lfD" transform="translate(-12.9 193.3) rotate(-13) scale(1.03)"/><use href="#lfC" transform="translate(14.8 193.3) rotate(80) scale(0.94)"/><use href="#lfD" transform="translate(5.9 195.2) rotate(77) scale(0.93)"/><use href="#lfD" transform="translate(5.9 195.2) rotate(-19) scale(0.88)"/><use href="#lfA" transform="translate(47.7 195.5) rotate(39) scale(0.85)"/><use href="#lfB" transform="translate(47.7 195.5) rotate(-38) scale(0.73)"/><use href="#lfC" transform="translate(110.6 195.7) rotate(366) scale(0.73)"/><use href="#lfA" transform="translate(110.6 195.7) rotate(274) scale(1.04)"/><use href="#lfA" transform="translate(62.4 195.7) rotate(56) scale(0.85)"/><use href="#lfB" transform="translate(62.4 195.7) rotate(-24) scale(1.00)"/><use href="#lfA" transform="translate(46.6 197.2) rotate(51) scale(0.79)"/><use href="#lfD" transform="translate(42.7 200.2) rotate(-56) scale(0.70)"/><use href="#lfC" transform="translate(95.4 201.7) rotate(404) scale(0.93)"/><use href="#lfA" transform="translate(95.4 201.7) rotate(293) scale(1.01)"/><use href="#lfC" transform="translate(91.6 203.0) rotate(378) scale(0.87)"/><use href="#lfB" transform="translate(91.6 203.0) rotate(312) scale(0.85)"/><use href="#lfB" transform="translate(124.5 203.9) rotate(393) scale(0.81)"/><use href="#lfD" transform="translate(124.5 203.9) rotate(298) scale(0.91)"/><use href="#lfC" transform="translate(16.2 204.7) rotate(48) scale(0.85)"/><use href="#lfA" transform="translate(16.2 204.7) rotate(-36) scale(0.78)"/><use href="#lfC" transform="translate(-20.7 205.1) rotate(64) scale(0.83)"/><use href="#lfA" transform="translate(-20.7 205.1) rotate(-39) scale(0.76)"/><use href="#lfA" transform="translate(-14.9 205.6) rotate(73) scale(1.04)"/><use href="#lfA" transform="translate(-14.9 205.6) rotate(-18) scale(0.77)"/><use href="#lfA" transform="translate(90.2 206.3) rotate(338) scale(0.75)"/><use href="#lfC" transform="translate(10.5 209.1) rotate(12) scale(0.93)"/><use href="#lfC" transform="translate(88.5 210.3) rotate(404) scale(0.71)"/><use href="#lfA" transform="translate(88.5 210.3) rotate(299) scale(0.89)"/><use href="#lfD" transform="translate(62.4 211.2) rotate(410) scale(0.86)"/><use href="#lfA" transform="translate(62.4 211.2) rotate(296) scale(0.79)"/><use href="#lfC" transform="translate(-22.2 213.1) rotate(63) scale(1.05)"/><use href="#lfB" transform="translate(-22.2 213.1) rotate(-22) scale(0.75)"/><use href="#lfD" transform="translate(0.5 213.2) rotate(68) scale(0.97)"/><use href="#lfC" transform="translate(0.5 213.2) rotate(-7) scale(0.76)"/><use href="#lfA" transform="translate(117.9 216.1) rotate(391) scale(0.98)"/><use href="#lfC" transform="translate(117.9 216.1) rotate(310) scale(0.83)"/><use href="#lfA" transform="translate(145.4 216.5) rotate(358) scale(0.74)"/><use href="#lfA" transform="translate(145.4 216.5) rotate(289) scale(0.77)"/><use href="#lfC" transform="translate(45.1 216.6) rotate(57) scale(1.00)"/><use href="#lfB" transform="translate(45.1 216.6) rotate(-13) scale(0.85)"/><use href="#lfD" transform="translate(49.4 220.7) rotate(55) scale(0.71)"/><use href="#lfA" transform="translate(49.4 220.7) rotate(-49) scale(1.03)"/><use href="#lfB" transform="translate(61.7 220.8) rotate(46) scale(0.76)"/><use href="#lfD" transform="translate(61.7 220.8) rotate(-45) scale(1.04)"/><use href="#lfD" transform="translate(99.7 221.4) rotate(394) scale(0.98)"/><use href="#lfD" transform="translate(99.7 221.4) rotate(296) scale(1.03)"/><use href="#lfC" transform="translate(96.0 221.7) rotate(373) scale(0.85)"/><use href="#lfD" transform="translate(96.0 221.7) rotate(317) scale(0.96)"/><use href="#lfB" transform="translate(38.8 221.8) rotate(-53) scale(0.86)"/><use href="#lfA" transform="translate(132.3 222.2) rotate(386) scale(0.72)"/><use href="#lfC" transform="translate(132.3 222.2) rotate(293) scale(0.76)"/><use href="#lfA" transform="translate(-30.4 223.6) rotate(16) scale(1.06)"/><use href="#lfB" transform="translate(-23.6 227.1) rotate(85) scale(0.70)"/><use href="#lfC" transform="translate(-23.6 227.1) rotate(-40) scale(0.93)"/><use href="#lfB" transform="translate(10.9 227.2) rotate(45) scale(0.97)"/><use href="#lfA" transform="translate(10.9 227.2) rotate(-14) scale(1.04)"/><use href="#lfA" transform="translate(99.9 227.7) rotate(287) scale(0.78)"/><use href="#lfB" transform="translate(91.5 229.1) rotate(403) scale(0.96)"/><use href="#lfA" transform="translate(91.5 229.1) rotate(313) scale(0.89)"/><use href="#lfD" transform="translate(-5.6 234.6) rotate(41) scale(0.94)"/><use href="#lfD" transform="translate(-5.6 234.6) rotate(-27) scale(0.74)"/><use href="#lfC" transform="translate(98.4 234.8) rotate(348) scale(0.97)"/><use href="#lfC" transform="translate(124.7 235.1) rotate(387) scale(0.71)"/><use href="#lfC" transform="translate(124.7 235.1) rotate(306) scale(0.84)"/><use href="#lfA" transform="translate(-32.7 235.6) rotate(72) scale(0.88)"/><use href="#lfD" transform="translate(-32.7 235.6) rotate(-35) scale(0.75)"/><use href="#lfA" transform="translate(155.9 236.0) rotate(388) scale(0.79)"/><use href="#lfA" transform="translate(155.9 236.0) rotate(302) scale(0.92)"/><use href="#lfD" transform="translate(63.3 237.5) rotate(411) scale(0.73)"/><use href="#lfD" transform="translate(63.3 237.5) rotate(319) scale(0.91)"/><use href="#lfA" transform="translate(100.2 239.1) rotate(386) scale(0.97)"/><use href="#lfB" transform="translate(100.2 239.1) rotate(306) scale(0.97)"/><use href="#lfC" transform="translate(42.6 241.7) rotate(-56) scale(0.98)"/><use href="#lfA" transform="translate(41.7 242.5) rotate(41) scale(1.03)"/><use href="#lfB" transform="translate(41.7 242.5) rotate(-34) scale(1.03)"/><use href="#lfA" transform="translate(60.7 243.5) rotate(38) scale(0.78)"/><use href="#lfD" transform="translate(60.7 243.5) rotate(-27) scale(0.87)"/><use href="#lfC" transform="translate(48.4 243.8) rotate(34) scale(1.04)"/><use href="#lfD" transform="translate(48.4 243.8) rotate(-53) scale(0.92)"/><use href="#lfC" transform="translate(160.2 244.1) rotate(328) scale(0.86)"/><use href="#lfA" transform="translate(-8.4 245.0) rotate(8) scale(0.86)"/><use href="#lfA" transform="translate(142.4 245.3) rotate(348) scale(0.92)"/><use href="#lfA" transform="translate(102.0 246.2) rotate(349) scale(1.00)"/><use href="#lfA" transform="translate(-37.8 246.7) rotate(31) scale(0.92)"/><use href="#lfA" transform="translate(105.3 247.2) rotate(405) scale(0.74)"/><use href="#lfC" transform="translate(105.3 247.2) rotate(322) scale(0.74)"/><use href="#lfB" transform="translate(-32.8 250.9) rotate(74) scale(0.76)"/><use href="#lfC" transform="translate(-32.8 250.9) rotate(-3) scale(0.95)"/><use href="#lfB" transform="translate(95.0 251.3) rotate(388) scale(0.96)"/><use href="#lfC" transform="translate(95.0 251.3) rotate(305) scale(0.87)"/><use href="#lfC" transform="translate(131.1 252.5) rotate(329) scale(1.08)"/><use href="#lfA" transform="translate(-34.1 254.6) rotate(31) scale(1.03)"/><use href="#lfA" transform="translate(4.8 254.6) rotate(50) scale(0.76)"/><use href="#lfB" transform="translate(4.8 254.6) rotate(-22) scale(0.88)"/><use href="#lfC" transform="translate(64.2 258.4) rotate(387) scale(0.87)"/><use href="#lfC" transform="translate(64.2 258.4) rotate(311) scale(1.03)"/><use href="#lfC" transform="translate(96.7 262.2) rotate(355) scale(0.87)"/><use href="#lfC" transform="translate(64.5 265.1) rotate(363) scale(0.95)"/><use href="#lfA" transform="translate(109.2 265.4) rotate(355) scale(0.85)"/><use href="#lfB" transform="translate(37.9 267.6) rotate(43) scale(0.94)"/><use href="#lfA" transform="translate(37.9 267.6) rotate(-39) scale(0.79)"/><use href="#lfA" transform="translate(59.2 269.2) rotate(45) scale(0.73)"/><use href="#lfB" transform="translate(59.2 269.2) rotate(-28) scale(0.84)"/><use href="#lfD" transform="translate(47.3 272.9) rotate(39) scale(0.98)"/><use href="#lfC" transform="translate(47.3 272.9) rotate(-63) scale(0.88)"/><use href="#lfA" transform="translate(58.6 278.6) rotate(-2) scale(1.00)"/><use href="#lfB" transform="translate(-0.4 279.1) rotate(45) scale(0.83)"/><use href="#lfB" transform="translate(-0.4 279.1) rotate(-36) scale(0.71)"/><use href="#lfC" transform="translate(35.3 283.6) rotate(10) scale(1.09)"/><use href="#lfA" transform="translate(-1.9 286.7) rotate(6) scale(1.09)"/><use href="#lfA" transform="translate(46.5 297.7) rotate(28) scale(0.96)"/><use href="#lfC" transform="translate(46.5 297.7) rotate(-32) scale(0.86)"/><use href="#lfA" transform="translate(46.3 305.8) rotate(11) scale(0.92)"/><rect x="51" y="2" width="18" height="62" rx="6" fill="url(#vgs)"/>
+<g stroke="#d8b98a" stroke-width="1.6" stroke-linecap="round" opacity=".9"><path d="M51 8 L69 13"/><path d="M51 14 L69 19"/><path d="M51 20 L69 25"/><path d="M51 26 L69 31"/><path d="M51 32 L69 37"/><path d="M51 38 L69 43"/><path d="M51 44 L69 49"/><path d="M51 50 L69 55"/><path d="M51 56 L69 61"/><path d="M51 62 L69 67"/></g>
+<g stroke="#5a3d20" stroke-width=".8" opacity=".6"><path d="M51 10 L69 15"/><path d="M51 16 L69 21"/><path d="M51 22 L69 27"/><path d="M51 28 L69 33"/><path d="M51 34 L69 39"/><path d="M51 40 L69 45"/><path d="M51 46 L69 51"/><path d="M51 52 L69 57"/><path d="M51 58 L69 63"/><path d="M51 64 L69 69"/></g>
+<ellipse cx="60" cy="3" rx="9" ry="3" fill="#caa56e"/><circle cx="57" cy="3" r="1.3" fill="#8a6a3a"/><circle cx="63" cy="3" r="1.3" fill="#8a6a3a"/>
+<path d="M60 2 C 48 -12, 72 -12, 60 2" stroke="#b08a58" stroke-width="2" fill="none"/>
+<path d="M54 62 q-4 10 -2 16 M67 62 q5 8 3 15" stroke="#c9a06a" stroke-width="1.8" fill="none" stroke-linecap="round"/></symbol></defs></svg>
 <div id="viewCover" class="cv" role="button" aria-label="タップしてはじめる">
   <div class="cv-glow" aria-hidden="true"></div>
   <div class="cv-top">
@@ -951,10 +1023,17 @@ html.locked body>*:not(#gate):not(script){display:none!important}
   </div>
 </div>
 <div id="tabList">
-<div id="filterChipWrap"></div>
-<div class="bar"><input id="q" placeholder="さがす(施設名・場所・メンバー・感想)"></div>
-<div id="list"></div>
-<div style="text-align:center;margin:18px 0 90px"><button type="button" class="linkbtn" id="joinOpen" style="color:var(--waku-soft);font-size:12.5px">招待リンクから参加する</button></div>
+<div class="saunaWall" id="wall">
+  <svg class="vh hang hangR" viewBox="0 0 240 350" aria-hidden="true"><use href="#vihta"/></svg>
+  <svg class="vh hang hangL" viewBox="0 0 240 350" aria-hidden="true"><use href="#vihta"/></svg>
+  <div class="whisk" id="whisk" aria-hidden="true"><svg class="vh" viewBox="0 0 240 350"><use href="#vihta"/></svg></div>
+  <div class="leaves" id="leaves" aria-hidden="true"></div>
+  <div id="filterChipWrap"></div>
+  <div class="bar wbar"><input id="q" placeholder="さがす(施設名・場所・メンバー・感想)"></div>
+  <div id="list"></div>
+  <div class="wallFoot"><button type="button" class="linkbtn" id="joinOpen" style="color:var(--waku-soft);font-size:12.5px">招待リンクから参加する</button></div>
+</div>
+</div>
 </div>
 </div>
 <button id="fab" aria-label="追加">＋</button>
@@ -989,7 +1068,9 @@ html.locked body>*:not(#gate):not(script){display:none!important}
 </form></dialog>
 
 <div id="viewDetail" hidden>
-<div class="wrap">
+<div class="wrap dtWrap">
+<svg class="vh hang dtHang" viewBox="0 0 240 350" aria-hidden="true"><use href="#vihta"/></svg>
+<div class="leaves" id="dtLeaves" aria-hidden="true"></div>
 <div class="bar"><button type="button" class="js-back" hidden>‹ 戻る</button><button type="button" id="dtToCover">表紙</button><button type="button" id="dtEdit">編集</button></div>
 <div class="dtCard" id="dtBody"></div>
 </div>
@@ -1344,14 +1425,15 @@ async function render(){
   if(k)a=a.filter(e=>[e.name,e.prefecture,e.address,e.members,e.memo].join(' ').toLowerCase().includes(k));
   const city=ad=>{const m=(ad||'').replace(/^.{2,3}[都道府県]/,'').match(/^(.+?[市区町村郡])/);return m?m[1]:''};
   const tv=v=>(v!==''&&v!=null&&!isNaN(v))?esc(v):'–';
-  $('#list').innerHTML=a.length?a.map(e=>{
+  $('#list').innerHTML=a.length?a.map((e,n)=>{
     const pend=e.status==='pending'?'<span class="tag" style="background:var(--heat);color:#fff;border-color:transparent;margin-right:6px">承認待ち</span>':'';
     const sub=[e.prefecture,city(e.address)].filter(Boolean).join(' ');
-    return `<div class="item" data-id="${esc(e.id)}"><div class="thumb">${e.photos[0]?`<img src="${e.photos[0]}" alt="" loading="lazy">`:'<div class="noimg">♨</div>'}${e.photos.length>1?`<span class="pcount">${e.photos.length}枚</span>`:''}</div>
+    return `<div class="item" data-id="${esc(e.id)}" style="--i:${Math.min(n,8)}"><div class="thumb">${e.photos[0]?`<img src="${e.photos[0]}" alt="" loading="lazy">`:'<div class="noimg">♨</div>'}${e.photos.length>1?`<span class="pcount">${e.photos.length}枚</span>`:''}</div>
 <div class="info"><h3>${pend}${esc(e.name)}</h3><div class="sub">${esc(sub)||'&nbsp;'}</div>
 <div class="bds"><span class="bd"><i class="ic sa">サ</i>${tv(e.saunaTemp)}</span><span class="bd"><i class="ic mi">水</i>${tv(e.mizuburoTemp)}</span><span class="bd"><i class="ic">外</i>${e.sotogaiyoku?'○':'–'}</span><span class="bd"><i class="ic">ロ</i>${(e.loyly||e.selfLoyly)?'○':'–'}</span></div>
 <div class="line">${star(e.rating)}<span>${e.rating||''}</span><time>${esc(e.date)}</time>${e.members?`<span>${esc(e.members)}</span>`:''}</div></div></div>`}).join(''):`<p class="empty">${activePref?esc(activePref)+'の記録はまだありません。':'まだ記録がありません。<br>右下の＋から書き始めましょう。'}</p>`;
   renderChip();renderMap();renderMapPage();coverStats();updateAdm();refreshDetail();
+  if(introWait&&document.querySelector('#list .item'))playListIntro();
 }
 function facilityEntries(pref){
   const by={};
@@ -1398,6 +1480,7 @@ function applyView(v){
   else{const c=$('#viewCover');if(c)c.hidden=true}
   if(v==='admin')renderAdmin();
   if(v==='detail')renderDetail(true);
+  if(v==='home')requestAnimationFrame(playListIntro);
   document.querySelectorAll('.js-back').forEach(b=>b.hidden=!viewStack.length);
   scrollTo(0,0);
 }
@@ -1438,9 +1521,35 @@ function goBack(){
 addEventListener('popstate',popView);
 setTimeout(()=>{booting=false},0);
 
+
+// ---- 記録のサウナ演出(ヴィヒタ・落ち葉) ----
+function fallLeaves(box,n,h){
+  if(!box||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const kinds=['lfA','lfB','lfC','lfD'];let html='';
+  for(let i=0;i<n;i++){
+    const sz=15+Math.random()*13;
+    html+=`<svg class="lf" viewBox="-14 -30 28 34" style="left:${(Math.random()*100).toFixed(0)}%;width:${sz.toFixed(0)}px;height:${(sz*1.2).toFixed(0)}px;--dl:${(Math.random()*1.2).toFixed(2)}s;--d:${(1.7+Math.random()*1.3).toFixed(2)}s;--dx:${(Math.random()*90-45).toFixed(0)}px;--h:${Math.round(h)}px;--r0:${(Math.random()*360).toFixed(0)}deg;--r1:${(Math.random()*560-120).toFixed(0)}deg"><use href="#${kinds[i%4]}"/></svg>`;
+  }
+  box.innerHTML=html;
+  clearTimeout(box._t);box._t=setTimeout(()=>{box.innerHTML=''},4200);
+}
+let introTimer=0,introWait=false;
+function playListIntro(){
+  const wall=document.getElementById('wall');
+  if(!wall||document.getElementById('tabList').hidden||document.getElementById('viewHome').hidden)return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  if(!wall.querySelector('.item')){introWait=true;clearTimeout(introTimer);introTimer=setTimeout(()=>{introWait=false},5000);return}
+  introWait=false;
+  wall.style.setProperty('--ww',wall.clientWidth+'px');
+  wall.classList.remove('intro');void wall.offsetWidth;wall.classList.add('intro');
+  fallLeaves(document.getElementById('leaves'),14,wall.clientHeight);
+  clearTimeout(introTimer);introTimer=setTimeout(()=>wall.classList.remove('intro'),3400);
+}
+
 // ---- リスト表示 / 地図表示 ----
 function setTab(t){
   $('#tabList').hidden=t!=='list';$('#tabMap').hidden=t!=='map';
+  if(t==='list')requestAnimationFrame(playListIntro);
   document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
 }
 $('#seg').onclick=e=>{const b=e.target.closest('button');if(b)setTab(b.dataset.tab)};
@@ -1488,6 +1597,7 @@ function renderDetail(animate){
   if(!e){dtSig='';$('#dtBody').innerHTML='<p class="admEmpty" style="margin:20px">この投稿は見つかりませんでした。</p>';$('#dtEdit').hidden=true;return}
   $('#dtEdit').hidden=false;dtSig=sigOf(e);
   $('#dtBody').innerHTML=dtHtml(e);
+  if(animate){const w=document.querySelector('.dtWrap');fallLeaves(document.getElementById('dtLeaves'),9,(w&&w.clientHeight)||700)}
   const gal=$('#gal'),gn=$('#galn');
   if(gal&&gn)gal.addEventListener('scroll',()=>{gn.textContent=(Math.round(gal.scrollLeft/gal.clientWidth)+1)+' / '+e.photos.length});
   // 数字がカウントして動き、ゲージが伸びる
